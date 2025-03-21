@@ -6,7 +6,12 @@ import seedu.healthbud.exception.InvalidListException;
 public class ListCommand extends Command {
 
     @Override
-    public void execute(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs, LogList cardioLogs,String input)
+    public void execute(LogList pbLogs,
+                        LogList mealLogs,
+                        LogList workoutLogs,
+                        LogList waterLogs,
+                        LogList cardioLogs,
+                        String input)
             throws InvalidListException {
 
         String[] parts = input.split(" ");

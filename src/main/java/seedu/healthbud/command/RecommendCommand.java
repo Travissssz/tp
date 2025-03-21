@@ -7,7 +7,8 @@ import seedu.healthbud.exception.HealthBudException;
 public class RecommendCommand extends Command {
 
     @Override
-    public void execute(LogList pbLogs, LogList logList, LogList workoutLogs, LogList waterLogs, LogList cardioLogs,String input) throws
+    public void execute(LogList pbLogs, LogList logList, LogList workoutLogs,
+                        LogList waterLogs, LogList cardioLogs,String input) throws
             InvalidRecommendException, HealthBudException {
 
         assert input != null : "Input should not be null";

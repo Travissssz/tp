@@ -6,7 +6,8 @@ import seedu.healthbud.exception.InvalidClearException;
 public class ClearCommand extends Command {
 
     @Override
-    public void execute(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs, LogList cardioLogs, String input) {
+    public void execute(LogList pbLogs, LogList mealLogs, LogList workoutLogs,
+                        LogList waterLogs, LogList cardioLogs, String input) {
         String[] parts = input.trim().split(" ");
         if (parts.length < 2) {
             return;

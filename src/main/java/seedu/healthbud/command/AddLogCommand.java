@@ -34,8 +34,8 @@ public class AddLogCommand extends Command {
 
             throw new InvalidLogException();
         }
-
-        switch (parts[1]) {
+        String command = parts[1];
+        switch (command) {
         case "pb":
             if (!input.contains("/e") || !input.contains("/w") || !input.contains("/d")) {
 
@@ -122,6 +122,9 @@ public class AddLogCommand extends Command {
             break;
 
         case "workout":
+            assert input != null : "Invalid workout input!";
+            assert !input.trim().isEmpty() : "Input should not be empty!";
+
             if (!input.contains("/r") || !input.contains("/s") || !input.contains("/d")) {
 
                 throw new InvalidWorkoutException();
@@ -134,12 +137,24 @@ public class AddLogCommand extends Command {
                 throw new InvalidWorkoutException();
             }
 
+            String exercise = "";
+            String reps = "";
+            String sets = "";
+            String date = "";
             //String name, String reps, String sets, String date
+            for (String token : workoutTokens) {
+                if (token.startsWith("r ")) {
+                    reps = token.substring(2).trim();
+                } else if (token.startsWith("s ")) {
+                    sets = token.substring(2).trim();
+                } else if (token.startsWith("d ")) {
+                    date = token.substring(2).trim();
+                } else {
+                    // If it doesn't start with a prefix, assume it's the exercise name
+                    exercise = token.trim();
+                }
+            }
 
-            String exercise = workoutTokens[0].trim();
-            String reps = workoutTokens[1].substring(2).trim(); // remove "r "
-            String sets = workoutTokens[2].substring(2).trim(); // remove "s "
-            String date = workoutTokens[3].substring(2).trim(); // remove "d "
             if (exercise.isEmpty() || reps.isEmpty() || sets.isEmpty() || date.isEmpty()) {
 
                 throw new InvalidWorkoutException();
@@ -185,35 +200,50 @@ public class AddLogCommand extends Command {
             assert input != null : "Invalid cardio input!";
             assert !input.trim().isEmpty() : "Input should not be empty!";
 
+            // Check if all required prefixes are present
             if (!input.contains("/s") || !input.contains("/i") || !input.contains("/t") || !input.contains("/d")) {
                 throw new InvalidCardioException();
             }
 
-            String cardioDetails = input.substring("add cardio ".length()).trim();
-            String[] cardio = cardioDetails.split("/");
+            // Extract cardio details
+            String cardioDetails = input.substring("add cardio".length()).trim();
+            String[] cardioTokens = cardioDetails.split("/");
 
-            if (cardio.length != 5) {
-                throw new InvalidCardioException();
+            String exercises = "";
+            String speed = "";
+            String duration = "";
+            String incline = "";
+            String dates = "";
+
+            // Iterate through the tokens and assign values based on prefixes
+            for (String token : cardioTokens) {
+                if (token.startsWith("s ")) {
+                    speed = token.substring(2).trim();
+                } else if (token.startsWith("i ")) {
+                    incline = token.substring(2).trim();
+                } else if (token.startsWith("t ")) {
+                    duration = token.substring(2).trim();
+                } else if (token.startsWith("d ")) {
+                    dates = token.substring(2).trim();
+                } else {
+                    // If it doesn't start with a prefix, assume it's the exercise name
+                    exercises = token.trim();
+                }
             }
 
-            String exercises = cardio[0].trim();
-            String speed = cardio[1].split(" ", 2)[1].trim();
-            String incline = cardio[2].split(" ", 2)[1].trim();
-            String duration = cardio[3].split(" ", 2)[1].trim();
-            String dates = cardio[4].split(" ", 2)[1].trim();
-
+            // Validate that all fields are filled
             if (exercises.isEmpty() || speed.isEmpty() || incline.isEmpty() || duration.isEmpty() || dates.isEmpty()) {
                 throw new InvalidCardioException();
             }
 
+            // Create and add the cardio log
             Cardio newCardio = new Cardio(exercises, duration, incline, speed, dates);
             cardioLogs.addLog(newCardio);
             Ui.printMessage(" Got it. I've added this cardio:");
             Ui.printMessage("   " + cardioLogs.getLog(cardioLogs.getSize() - 1));
-            //Storage.appendLogToFile(newCardio);
+            //Storage.appendLogToFile(newCardio); // Uncomment if needed
             Ui.printMessage(" Now you have " + cardioLogs.getSize() + " cardio logs in the list.");
             break;
-
 
         default:
             Ui.printMessage("Invalid type of log");

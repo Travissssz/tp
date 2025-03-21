@@ -11,3 +11,10 @@ WO | <exercise> | <date> | <reps> | <sets>
 WA | 500 | 12-12-12 | 9
 WO | <exercise> | <date> | <reps> | <sets>
 WO | <exercise> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>
+WO | s <sets> | <date> | <reps> | <sets>
+WO | s <sets> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>
+WO | push | 12-12-12 | 3 | 5
+WO | push | 12-12-12 | 3 | 5
