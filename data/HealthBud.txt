@@ -3,3 +3,11 @@ WA | 500000 | 12-01-25 | 9pm
 WA | 125000 | 12-01-25 | 9pm
 WO | <exercise> | <date> | <reps> | <sets>
 WO | <exercise> | 12-02-25 | <reps> | <sets>
+WO | name | 12-12-12- | 3 | 3
+WO | name | 121212 | 3 | 4
+WO | <exercise> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>
+WA | 500 | 12-12-12 | 9
+WO | <exercise> | <date> | <reps> | <sets>
+WO | <exercise> | <date> | <reps> | <sets>

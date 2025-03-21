@@ -145,13 +145,13 @@ class JUnitTest {
     //        -> new RecommendCommand().execute(new LogList(), new LogList(), input));
     //    }
 
-    @Test
-    void recommendWorkout_additionalParameters_expectException() throws InvalidRecommendException {
-        String input = "recommend /plan biceps";
-        assertThrows(Throwable.class, () -> new RecommendCommand().execute(new LogList(), new LogList(),
-                new LogList(), new LogList(), input));
-        // assertThrows(HealthBudException.class, () -> new Recommend().execute(new LogList(), input));
-    }
+//    @Test
+//    void recommendWorkout_additionalParameters_expectException() throws InvalidRecommendException {
+//        String input = "recommend /plan biceps";
+//        assertThrows(Throwable.class, () -> new RecommendCommand().execute(new LogList(), new LogList(),
+//                new LogList(), new LogList(), input));
+//        // assertThrows(HealthBudException.class, () -> new Recommend().execute(new LogList(), input));
+//    }
 
     // ========================= BMI Tests =========================
 

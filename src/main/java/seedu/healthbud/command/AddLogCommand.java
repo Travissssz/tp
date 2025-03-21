@@ -9,10 +9,12 @@ import seedu.healthbud.exception.InvalidMealException;
 import seedu.healthbud.exception.InvalidPBException;
 import seedu.healthbud.exception.InvalidWaterException;
 import seedu.healthbud.exception.InvalidWorkoutException;
+import seedu.healthbud.exception.InvalidCardioException;
 import seedu.healthbud.log.Meal;
 import seedu.healthbud.log.Water;
-import seedu.healthbud.log.Test;
+import seedu.healthbud.log.Workout;
 import seedu.healthbud.log.PB;
+import seedu.healthbud.log.Cardio;
 import seedu.healthbud.storage.Storage;
 
 public class AddLogCommand extends Command {
@@ -23,8 +25,9 @@ public class AddLogCommand extends Command {
             LogList mealLogs,
             LogList workoutLogs,
             LogList waterLogs,
+            LogList cardioLogs,
             String input) throws InvalidMealException, InvalidWorkoutException,
-            InvalidWaterException, InvalidLogException, InvalidPBException, InvalidMLException {
+            InvalidWaterException, InvalidLogException, InvalidPBException, InvalidMLException, InvalidCardioException {
 
         String[] parts = input.trim().split(" ");
         if (parts.length < 2) {
@@ -131,6 +134,8 @@ public class AddLogCommand extends Command {
                 throw new InvalidWorkoutException();
             }
 
+            //String name, String reps, String sets, String date
+
             String exercise = workoutTokens[0].trim();
             String reps = workoutTokens[1].substring(2).trim(); // remove "r "
             String sets = workoutTokens[2].substring(2).trim(); // remove "s "
@@ -140,7 +145,7 @@ public class AddLogCommand extends Command {
                 throw new InvalidWorkoutException();
             }
 
-            Test newWorkout = new Test(exercise, reps, sets, date);
+            Workout newWorkout = new Workout(exercise, reps, sets, date);
             workoutLogs.addLog(newWorkout);
             Ui.printMessage(" Got it. I've added this workout:");
             Ui.printMessage("   " + workoutLogs.getLog(workoutLogs.getSize() - 1));
@@ -175,6 +180,40 @@ public class AddLogCommand extends Command {
             Storage.appendLogToFile(newMeal);
             Ui.printMessage(" Now you have " + mealLogs.getSize() + " meals in the list.");
             break;
+
+        case "cardio":
+            assert input != null : "Invalid cardio input!";
+            assert !input.trim().isEmpty() : "Input should not be empty!";
+
+            if (!input.contains("/s") || !input.contains("/i") || !input.contains("/t") || !input.contains("/d")) {
+                throw new InvalidCardioException();
+            }
+
+            String cardioDetails = input.substring("add cardio ".length()).trim();
+            String[] cardio = cardioDetails.split("/");
+
+            if (cardio.length != 5) {
+                throw new InvalidCardioException();
+            }
+
+            String exercises = cardio[0].trim();
+            String speed = cardio[1].split(" ", 2)[1].trim();
+            String incline = cardio[2].split(" ", 2)[1].trim();
+            String duration = cardio[3].split(" ", 2)[1].trim();
+            String dates = cardio[4].split(" ", 2)[1].trim();
+
+            if (exercises.isEmpty() || speed.isEmpty() || incline.isEmpty() || duration.isEmpty() || dates.isEmpty()) {
+                throw new InvalidCardioException();
+            }
+
+            Cardio newCardio = new Cardio(exercises, duration, incline, speed, dates);
+            cardioLogs.addLog(newCardio);
+            Ui.printMessage(" Got it. I've added this cardio:");
+            Ui.printMessage("   " + cardioLogs.getLog(cardioLogs.getSize() - 1));
+            //Storage.appendLogToFile(newCardio);
+            Ui.printMessage(" Now you have " + cardioLogs.getSize() + " cardio logs in the list.");
+            break;
+
 
         default:
             Ui.printMessage("Invalid type of log");

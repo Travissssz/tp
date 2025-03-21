@@ -24,13 +24,14 @@ import seedu.healthbud.exception.InvalidSumException;
 import seedu.healthbud.exception.InvalidWaterException;
 import seedu.healthbud.exception.InvalidWorkoutException;
 import seedu.healthbud.exception.InvalidViewException;
+import seedu.healthbud.exception.InvalidCardioException;
 
 
 public class Parser {
 
     public static final String NEW_LINE = "\n     ";
 
-    public static boolean handleInput(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs,
+    public static boolean handleInput(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs, LogList cardioLogs,
                                       String input) {
         try {
             String command = input.split(" ")[0].toLowerCase();
@@ -38,34 +39,34 @@ public class Parser {
             case "bye":
                 return Ui.printGoodbye();
             case "add":
-                new AddLogCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new AddLogCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs,cardioLogs, input);
                 return true;
             case "help":
                 Ui.printHelp();
                 return true;
             case "list":
-                new ListCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new ListCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs,input);
                 return true;
             case "recommend":
-                new RecommendCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new RecommendCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs,cardioLogs, input);
                 return true;
             case "bmi":
-                new BMICommand(input).execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new BMICommand(input).execute(pbLogs, mealLogs, workoutLogs, waterLogs,cardioLogs, input);
                 return true;
             case "find":
-                new FindCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new FindCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs, input);
                 return true;
             case "delete":
-                new DeleteCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new DeleteCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs,input);
                 return true;
             case "clear":
-                new ClearCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new ClearCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs,input);
                 return true;
             case "sum":
-                new SumCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new SumCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs,cardioLogs, input);
                 return true;
             case "view":
-                new ViewCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, input);
+                new ViewCommand().execute(pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs,input);
                 return true;
             default:
                 Ui.printUnknownCommand();
@@ -74,7 +75,7 @@ public class Parser {
         } catch (InvalidMealException | InvalidRecommendException | InvalidBMIException | HealthBudException |
                  InvalidLogException | InvalidWaterException | InvalidWorkoutException | InvalidListException |
                  InvalidFindException | InvalidDeleteException | InvalidPBException | InvalidClearException |
-                 InvalidSumException | InvalidViewException e) {
+                 InvalidSumException | InvalidViewException | InvalidCardioException e) {
             System.out.println(e.getMessage());
         }
         return true;

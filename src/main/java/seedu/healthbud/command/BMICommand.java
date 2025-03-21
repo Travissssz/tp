@@ -34,7 +34,7 @@ public class BMICommand extends Command{
     }
 
     @Override
-    public void execute(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs, String input){
+    public void execute(LogList pbLogs, LogList mealLogs, LogList workoutLogs, LogList waterLogs,LogList cardioLogs, String input){
         double bmi = weight / (height * height);
         Ui.printMessage("Your BMI is: " + String.format("%.2f", bmi));
     }
