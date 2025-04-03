@@ -1,7 +1,7 @@
 # Overview
-
-A short overview of your product to provide some context to the reader. The opening 1-2 sentences may be reused by all
-team members. If your product overview extends beyond 1-2 sentences, the remainder should be written by yourself.
+HealthBud is a CLI-based fitness logging assistant designed to help users track and improve their personal health
+goals. It supports logging of meals, workouts, water intake, cardio sessions, and personal bests, while also offering
+intelligent features such as progress status and workout recommendations.
 
 # Summary of Contributions
 ## Code contributed
@@ -10,15 +10,23 @@ team members. If your product overview extends beyond 1-2 sentences, the remaind
 
 ## Enhancements implemented
 
-A summary of the enhancements you implemented.
+I took charge of the implementations of the Goal and Water functions. I was focused on designing the features such
+that it would be user-friendly all the while not compromising on the user's experience as well as giving them the full 
+experience that our app was meant to deliver.
+
+I also was involved in a few major revamps that our team decided for the projects, such as the increase in teh OOP-ness
+of the project by splitting the parser and command execution functions. Our project compartmentalizes functionality in
+a sense that we have a function which handles its own logic (command classes), while the input is getting parsed by a 
+separate, exclusive function. This drastically improved readability of our code and made our whole project much easier 
+to understand.
 
 ## Contributions to the UG
 
-Which sections did you contribute to the UG?
+I added the Goal and Water sections of the UG.
 
 ## Contributions to the DG
 
-Which sections did you contribute to the DG? Which UML diagrams did you add/updated?
+I added the Goals Section as well as the Architecture Diagram.
 
 ## Contributions to team-based tasks
 

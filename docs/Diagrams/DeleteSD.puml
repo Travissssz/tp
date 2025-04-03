@@ -15,8 +15,13 @@ activate GeneralParser
 GeneralParser -> DeleteParser : parse("delete meal 3", mealLogs, ...)
 activate DeleteParser
 
-DeleteParser -> DeleteParser : Extract log type ("meal") and index (3)
-DeleteParser -> GeneralParser : return DeleteCommand(mealLogs, index=3)
+DeleteParser -> DeleteParser : Extract log type and index
+activate DeleteParser
+
+DeleteParser --> DeleteParser : index = 3 & logType = "meal"
+deactivate DeleteParser
+
+DeleteParser --> GeneralParser : return DeleteCommand(mealLogs, index=3)
 deactivate DeleteParser
 
 GeneralParser -> DeleteCommand : execute()

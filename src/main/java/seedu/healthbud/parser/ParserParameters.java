@@ -26,7 +26,6 @@ public class ParserParameters {
                 currentValue.append(token);
             }
         }
-
         // Add the last parameter
         if (currentKey != null) {
             params.put(currentKey, currentValue.toString().trim());

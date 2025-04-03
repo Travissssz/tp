@@ -1,0 +1,59 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Storage {
+    +DATA_DIRECTORY : String
+    +DATA_FILE : String
+    +DATA_PATH : Path
+    +loadLogs(mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, pbLogs: LogList, cardioLogs: LogList, goalLogs: LogList) : void
+    +parseStringToLog(line: String) : Log
+    +appendLogToFile(log: Log) : void
+    +rewriteLogsToFile(logs: LogList) : void
+    +parseLogToString(log: Log) : String
+}
+
+class LogList {
+    +getLog(index: int) : Log
+    +getSize() : int
+    +isEmpty() : boolean
+    +loadLog(log: Log) : void
+    +addLog(log: Log) : void
+    +deleteLog(index: int) : void
+    ...
+}
+
+abstract class Log {
+    +getDate() : String
+    +getLogType() : String
+    +toString() : String
+}
+
+class Meal
+class Workout
+class Water
+class PersonalBest
+class Cardio
+class Goals {
+    +getInstance() : Goals
+    +setDailyWaterGoal(goal: String) : void
+    +setDailyCalorieGoal(goal: String) : void
+    +setWeightGoal(goal: String) : void
+    +getDailyWaterGoal() : String
+    +getDailyCalorieGoal() : String
+    +getWeightGoal() : String
+}
+
+Storage ..> LogList : uses
+Storage ..> Log : creates/uses
+Storage ..> Meal : <<create>>
+Storage ..> Workout : <<create>>
+Storage ..> Water : <<create>>
+Storage ..> PersonalBest : <<create>>
+Storage ..> Cardio : <<create>>
+Storage ..> Goals : <<create>>
+
+Storage ..> LogList : uses
+Storage ..> Logs : uses
+Storage ..> ParserManager: : uses
+
+@enduml

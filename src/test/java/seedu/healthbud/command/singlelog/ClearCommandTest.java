@@ -27,8 +27,10 @@ class ClearCommandTest {
         String input = "add meal chicken rice /cal 550 /d 12-01-2025 /t 9pm";
         String secondInput = "add meal tom yum /cal 650 /d 13-01-2025 /t 8pm";
 
-        AddMealCommand addCommand1 = new AddMealCommand(mealLogs, input, "chicken rice", "550", "12 Jan 2025", "9pm");
-        AddMealCommand addCommand2 = new AddMealCommand(mealLogs, secondInput, "tom yum", "650", "13 Jan 2025", "8pm");
+        AddMealCommand addCommand1 = new AddMealCommand(mealLogs, input, "chicken rice", "550",
+                "12 Jan 2025", "9pm");
+        AddMealCommand addCommand2 = new AddMealCommand(mealLogs, secondInput, "tom yum", "650",
+                "13 Jan 2025", "8pm");
 
         addCommand1.execute();
         addCommand2.execute();
@@ -57,4 +59,49 @@ class ClearCommandTest {
             ClearParser.parse(input, mealLogs, workoutLogs, waterLogs, pbLogs, cardioLogs);
         });
     }
+
+    @Test
+    void clear_workoutLogs_expectSuccess() throws InvalidClearException {
+        LogList workoutLogs = new LogList();
+        LogList empty = new LogList();
+        ClearCommand command = ClearParser.parse("clear workout", empty, empty, empty, empty, workoutLogs);
+        command.execute();
+        assertEquals(0, workoutLogs.getSize());
+    }
+
+    @Test
+    void clear_pbLogs_expectSuccess() throws InvalidClearException {
+        LogList pbLogs = new LogList();
+        LogList empty = new LogList();
+        ClearCommand command = ClearParser.parse("clear pb", pbLogs, empty, empty, empty, empty);
+        command.execute();
+        assertEquals(0, pbLogs.getSize());
+    }
+
+    @Test
+    void clear_waterLogs_expectSuccess() throws InvalidClearException {
+        LogList waterLogs = new LogList();
+        LogList empty = new LogList();
+        ClearCommand command = ClearParser.parse("clear water", empty, empty, waterLogs, empty, empty);
+        command.execute();
+        assertEquals(0, waterLogs.getSize());
+    }
+
+    @Test
+    void clear_cardioLogs_expectSuccess() throws InvalidClearException {
+        LogList cardioLogs = new LogList();
+        LogList empty = new LogList();
+        ClearCommand command = ClearParser.parse("clear cardio", empty, empty, empty, empty, cardioLogs);
+        command.execute();
+        assertEquals(0, cardioLogs.getSize());
+    }
+
+    @Test
+    void clear_invalidLogType_expectFailure() {
+        assertThrows(InvalidClearException.class, () -> {
+            ClearParser.parse("clear invalid", new LogList(), new LogList(),
+                    new LogList(), new LogList(), new LogList());
+        });
+    }
+
 }

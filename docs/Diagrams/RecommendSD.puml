@@ -1,34 +1,40 @@
 @startuml
-autonumber
 
 actor User
-participant "RecommendParser" as Parser
-participant "RecommendCommand"
-participant "Ui"
-participant "ExceptionHandler\n(HealthBudException / InvalidRecommendException)" as ExceptionHandler
+participant ":RecommendParser"
+participant ":RecommendCommand"
+participant ":Ui"
+participant ":ExceptionHandler"
 
-User -> Parser: parse("recommend chest")
-activate Parser
+User -> ":RecommendParser": parse("recommend <muscle_group>")
+activate ":RecommendParser"
 
 alt valid input
-    Parser -> RecommendCommand: new RecommendCommand(list)
-    activate RecommendCommand
-    Parser --> User: RecommendCommand
-    deactivate RecommendCommand
+    create ":RecommendCommand"
+    ":RecommendParser" -> ":RecommendCommand": new RecommendCommand(list)
+    activate ":RecommendCommand"
 
-    User -> RecommendCommand: execute()
-    activate RecommendCommand
+    ":RecommendCommand" -> ":RecommendCommand": execute()
+    ":RecommendCommand" -> ":Ui": printMessage(list)
+    activate ":Ui"
+    ":Ui" --> ":RecommendCommand": display message
+    deactivate ":Ui"
 
-    RecommendCommand -> Ui: printMessage(list)
-    activate Ui
-    deactivate Ui
+    ":RecommendCommand" --> ":RecommendParser": success message
+    deactivate ":RecommendCommand"
 
-    deactivate RecommendCommand
+    ":RecommendParser" --> User: success message
+    deactivate ":RecommendParser"
+
 else invalid input
-    Parser -> ExceptionHandler: throw InvalidRecommendException / HealthBudException
-    activate ExceptionHandler
-    deactivate ExceptionHandler
+    ":RecommendParser" -> ":ExceptionHandler": throw exception
+    activate ":ExceptionHandler"
+    ":ExceptionHandler" --> ":RecommendParser": error message
+    deactivate ":ExceptionHandler"
+
+    ":RecommendParser" --> User: error message
+    deactivate ":RecommendParser"
 end
 
-deactivate Parser
 @enduml
+

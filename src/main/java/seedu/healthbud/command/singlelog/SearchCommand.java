@@ -3,7 +3,6 @@ package seedu.healthbud.command.singlelog;
 import seedu.healthbud.LogList;
 import seedu.healthbud.Ui;
 import seedu.healthbud.command.SingleLogCommand;
-import seedu.healthbud.exception.InvalidDateFormatException;
 
 public class SearchCommand extends SingleLogCommand {
     private final String date;
@@ -16,8 +15,8 @@ public class SearchCommand extends SingleLogCommand {
     }
 
     @Override
-    public void execute() throws InvalidDateFormatException {
-        // Ensure exactly one of date or keyword is provided
+    public void execute() {
+        // Check that exactly one of date or keyword is provided
         if ((date != null && keyword != null) || (date == null && keyword == null)) {
             Ui.printMessage("Invalid search parameters. Provide either /d <date> or /k <keyword>, but not both.");
             return;

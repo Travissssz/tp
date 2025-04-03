@@ -1,0 +1,99 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+
+class LogList {
+  - logs: List<Log>
+  + getLog(index: int): Log
+  + getSize(): int
+  + isEmpty(): boolean
+  + updateLog(log: Log): void
+  + addLog(log: Log): void
+  + loadLog(log: Log): void
+  + deleteLog(index: int): void
+  + listLogs(): void
+  + findLog(keyword: String): void
+  + clearLogs(): void
+  + getAllDates(): void
+  + getCaloriesSum(date: String): int
+  + getCardioSum(date: String): int
+  + getWaterSum(date: String): void
+}
+
+class Log {
+  - date: String
+  - logType: String
+  + getLogType(): String
+  + getDate(): String
+}
+
+class Meal {
+  - name: String
+  - calories: String
+  - time: String
+  + getName(): String
+  + getCalories(): String
+  + getTime(): String
+  + toString(): String
+}
+
+class Workout {
+  - name: String
+  - reps: String
+  - sets: String
+  - weight: String
+  + getName(): String
+  + getReps(): String
+  + getSets(): String
+  + getWeight(): String
+  + toString(): String
+}
+
+class Water {
+  - amount: String
+  - time: String
+  + getAmount(): String
+  + getTime(): String
+  + toGlass(amount: String): String
+  + toString(): String
+}
+
+class Cardio {
+  - name: String
+  - speed: String
+  - incline: String
+  - duration: String
+  + getName(): String
+  + getSpeed(): String
+  + getIncline(): String
+  + getDuration(): String
+  + toString(): String
+}
+
+class PersonalBest {
+  - exercise: String
+  - weight: String
+  + getExercise(): String
+  + getWeight(): String
+  + toString(): String
+}
+
+class Goals {
+  - dailyWaterGoal: String
+  - dailyCalorieGoal: String
+  - weightGoal: String
+  - weeklyWeightProgress: String
+  + getInstance(): Goals
+  + updateGoals(water: String, calorie: String, weight: String): void
+  + toString(): String
+}
+
+LogList "1" --> "0..*" Log : contains
+Log <|-- Meal
+Log <|-- Workout
+Log <|-- Water
+Log <|-- Cardio
+Log <|-- PersonalBest
+Log <|-- Goals
+
+@enduml

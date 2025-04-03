@@ -1,0 +1,23 @@
+@startuml
+title HealthBud UI Class Diagram
+skinparam defaultFontSize 14
+skinparam arrowThickness 1
+
+class Ui {
+  +NEW_LINE: String
+  +printMessage(message: String): void
+  +printHealthBuds(): void
+  +printGreeting(): void
+  +printGoodbye(): boolean
+  +printHelp(): void
+  +printUnknownCommand(): void
+  +printListedFormat(logs: LogList, index: int): void
+}
+
+class LogList {
+  +getLog(index: int): String
+}
+
+Ui --> LogList : uses
+
+@enduml

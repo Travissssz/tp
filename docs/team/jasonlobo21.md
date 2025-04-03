@@ -11,13 +11,17 @@ The application incorporates robust command parsing, in-memory log management, a
 
 ## Enhancements implemented
 
-I laid the groundwork of the project by implementing the base log classes, which provide a foundation for meal, workout, and other log types to be extended. I also implemented the LogList class to manage the collection of logs in memory. Additionally, I developed the storage system that reads from and writes to a text file, ensuring data persistence across sessions.
+I laid the groundwork of the project by implementing the base log classes, which provide a foundation for meal, workout, and other log types to be extended. I implemented the LogList class to manage the collection of logs in memory. 
+I then created the meal logs as a proof-of-concept and template—enabling my teammates to later implement their own versions of log types for workout, cardio, and other categories. 
+Additionally, I developed the storage system that reads from and writes to a text file, ensuring data persistence across sessions.
 
-On the user interface side, I implemented the Ui component to display information to users in a clean and organized manner. In terms of feature development, I contributed to the meal log functionalities by implementing delete, list, and clear commands, as well as a find feature that was later merged into the search functionality.
+On the user interface side, I implemented the Ui component to display information to users in a clean and organized manner. 
+In terms of feature development, I contributed to the meal log functionalities by implementing delete, list, and clear commands, as well as a find feature that was later merged into the search functionality.
 
 Furthermore, I created the ParserParameters utility, which utilizes hashing to allow users to input parameters (e.g., /t, /d) in any order, improving the flexibility of the command parsing process.
 
-In addition to these individual contributions, I continuously sought ways to make the codebase less messy and more concise. I have actively contributed to refining both my own code and that of my teammates, ensuring that the overall quality of our project remains high.
+In addition to these individual contributions, I continuously sought ways to make the codebase less messy and more concise. 
+I have actively contributed to refining both my own code and that of my teammates, ensuring that the overall quality of our project remains high.
 
 ## Contributions to the UG
 

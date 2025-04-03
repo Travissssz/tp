@@ -1,29 +1,66 @@
-/*
 @startuml
-'autonumber for call numbering
-autonumber
-
 actor User
-participant "AddGoalParser" as Parser
-participant "AddGoalCommand"
-participant "Goals (singleton)"
-participant "Ui"
-participant "ExceptionHandler\n(InvalidGoalException)"
+participant ":HealthBud" as HealthBud
+participant ":GeneralParser" as GeneralParser
+participant ":AddParser" as AddParser
+participant ":AddGoalParser" as AddGoalParser
+participant ":ParserParameters" as ParserParameters
+participant ":AddGoalCommand" as AddGoalCommand
+participant ":Goals" as Goals
+participant "goalLogs:LogList" as LogList
 
-User -> Parser: parse("add goal /w 3000 /cal 2000 /kg 70")
+User -> HealthBud : "add goal /w 2000 /cal 1800 /kg 65"
+activate HealthBud
 
-alt valid input
-    Parser -> Goals: getInstance()
-    Parser -> AddGoalCommand: new AddGoalCommand(goalLogs, input, "3000", "2000", "70")
-    Parser --> User: AddGoalCommand
+HealthBud -> GeneralParser : handleInput("add goal ...")
+activate GeneralParser
 
-    User -> AddGoalCommand: execute()
-    AddGoalCommand -> Goals: getInstance()
-    AddGoalCommand -> Goals: updateGoals("3000", "2000", "70")
-    AddGoalCommand -> Ui: printMessage(goal.toString())
-else invalid input
-    Parser -> ExceptionHandler: throw InvalidGoalException
-end
+GeneralParser -> AddParser : parse("goal", goalLogs, ...)
+activate AddParser
 
+AddParser -> AddGoalParser : parse(goalLogs, input)
+activate AddGoalParser
+
+AddGoalParser -> ParserParameters : parseParameters("/w 2000 /cal 1800 /kg 65")
+activate ParserParameters
+ParserParameters --> AddGoalParser : params {w: "2000", cal: "1800", kg: "65"}
+deactivate ParserParameters
+
+AddGoalParser -> Goals : getInstance()
+activate Goals
+Goals --> AddGoalParser : singleton instance
+deactivate Goals
+
+AddGoalParser --> AddParser : new AddGoalCommand
+deactivate AddGoalParser
+
+AddParser --> GeneralParser : AddGoalCommand
+deactivate AddParser
+
+GeneralParser -> AddGoalCommand : execute()
+activate AddGoalCommand
+
+AddGoalCommand -> Goals : getInstance()
+activate Goals
+Goals --> AddGoalCommand : singleton instance
+deactivate Goals
+
+AddGoalCommand -> Goals : updateGoals("2000", "1800", "65")
+activate Goals
+Goals --> AddGoalCommand
+deactivate Goals
+
+AddGoalCommand -> LogList : addLog(Goals)
+activate LogList
+LogList --> AddGoalCommand
+deactivate LogList
+
+AddGoalCommand --> GeneralParser
+deactivate AddGoalCommand
+
+GeneralParser --> HealthBud
+deactivate GeneralParser
+
+HealthBud --> User
+deactivate HealthBud
 @enduml
-*/

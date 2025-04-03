@@ -1,0 +1,50 @@
+@startuml
+scale 0.7
+
+actor User
+class File
+
+package "UI" {
+  class HealthBud
+  class Ui
+}
+
+package "Parser" {
+  class ParserManager
+  class AddParser
+}
+
+package "Command" {
+  class Command
+  class InputCommand
+  class SingleLogCommand
+  class MultiLogCommand
+}
+
+package "Model" {
+  class LogList
+  class Log
+}
+
+package "Storage" {
+  class Storage
+}
+
+User --> HealthBud
+HealthBud --> Ui
+HealthBud --> Storage
+HealthBud --> ParserManager
+ParserManager --> AddParser
+AddParser --> Command
+ParserManager --> Command : execute()
+
+InputCommand --|> Command
+SingleLogCommand --|> Command
+MultiLogCommand --|> Command
+
+SingleLogCommand --> LogList
+MultiLogCommand --> LogList
+LogList --> Log
+Storage --> LogList : loadLogsFromFile()
+Storage --> File
+@enduml

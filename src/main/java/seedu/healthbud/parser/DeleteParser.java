@@ -11,6 +11,8 @@ public class DeleteParser {
                                       LogList pbLogs, LogList cardioLogs)
             throws InvalidDeleteException, HealthBudException {
 
+        assert input != null : "Input should not be null";
+
         String[] parts = input.trim().split(" ");
         if (parts.length < 3) {
             throw new InvalidDeleteException();

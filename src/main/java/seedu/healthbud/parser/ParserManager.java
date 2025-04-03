@@ -47,11 +47,14 @@ public class ParserManager {
                 command = StatusParser.parse(input, goalLogs, pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs);
                 break;
             case "search":
-                command = SearchParser.parse(input, mealLogs, workoutLogs, waterLogs, pbLogs, cardioLogs, goalLogs);
+                command = SearchParser.parse(input, mealLogs, workoutLogs, waterLogs, pbLogs, cardioLogs);
                 break;
             case "view":
                 ViewGoalsParser.parse(input);
                 return true;
+            case "track":
+                command = TrackGoalParser.parse(input, goalLogs, pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs);
+                break;
             default:
                 Ui.printUnknownCommand();
                 return true;

@@ -35,9 +35,15 @@ The bulk of the CLI's work id done by the following components:
 
 ### UI
 
+![UI_Class_Diagram](images/UiCD.png) <br>
+
+- The UI component is responsible for user interactions. It handles displaying messages, prompts, and error messages to the user. 
+
+
+
+
 ### Parser
 
-![Parser_Class_Diagram](Images/ParserCD.png)
 
 The Parser interface uses a series of classes to implement the various commands.
 
@@ -45,116 +51,134 @@ The Parser interface uses a series of classes to implement the various commands.
 `//TODO: include command class diagram here`
 
 ### LogList
-`//TODO: include command class diagram here`
+![LogList_Class_Diagram](images/LogListCD.png)
+
+The LogList class manages a list of logs, each representing a fitness-related entry such as meals, workouts, water 
+intake, cardio sessions, personal bests, or goals. It maintains a List<Log> and provides methods to add, delete, update,
+list, and search through these logs.
+
+- The abstract Log class is the superclass for all log types.
+- Subclasses like Meal, Workout, Water, Cardio, PersonalBest, and Goals extend Log and store specific data for each log type.
+- LogList has a one-to-many association with Log, represented by the contains relationship.
+- The Goals class follows a singleton pattern via getInstance() and stores user-defined fitness goals.
+
+This design promotes extensibility and encapsulation, allowing new log types to be added easily while maintaining a consistent interface.
 
 ### Storage
-`//TODO: include command class diagram here`
+The Storage class manages HealthBud log persistence by reading and writing to a designated text file. It creates necessary directories and files, loads logs by parsing each line into specific types (Meal, Workout, etc.), and distributes them into corresponding LogLists. It also appends and rewrites logs using formatted string representations while handling errors gracefully.
+![Storage_Class_Diagram](images/StorageCD.png)
 
 ### Data
 `//TODO: include command class diagram here`
 
 
-## implementation
+# Implementation
 
-### Add Log Command
+## Add Log Command
 `//TODO: include SD here`
 
-### Delete Log Command
-The delete log feature allows users to remove a log by its index in the application's log list. This feature is handled by the DeleteCommand class, which performs validation, deletion, and error handling.
+## Delete Log Command
+The delete log feature allows users to remove a log by its index from the application's log list. This feature is handled by the `DeleteCommand` class, which performs validation, deletion, and error handling.
 
-1. User Input: <br>
-  The user enters the delete command followed by the log's index (e.g., delete meal 3).
+### 1. User Input: <br>
+- The user enters the delete command followed by the log's index (e.g., `delete meal 3`).
 
+### 2. Command Parsing: <br>
+- The Parser converts the input into a `DeleteCommand` object, adjusting the index to match the list’s 0-based indexing. This process is handled by the `ParserManager` and the `DeleteParser.`
 
-2. Command Parsing: <br>
-The Parser converts the input into a DeleteCommand object, adjusting the index to match the list’s 0-based indexing.
-
-
-3. Execution: <br>
-The DeleteCommand:
-
- - Validation: Verifies whether the specified index is valid and corresponds to an existing meal log.
-
+### 3. The `DeleteCommand` executes as follows: <br>
+- Validation: Verifies whether the specified index is valid and corresponds to an existing meal log.
 - Error Handling: If the index is invalid, an error message is returned to the user.
+- Deletion: If the index is valid, the command retrieves the log’s details, removes the log from the Logs list, and generates a success message.
 
-- Deletion: If the index is valid, the command retrieves the meal log’s details, removes the meal log from the mealLogs list, and generates a success message.
+### 4. How the feature is implemented: <br>
+- The deletion functionality is handled by the DeleteCommand class. It validates the user-provided index, adjusts it to match the 0-based indexing of the log list, and performs the deletion on the LogList object. This keeps the deletion logic isolated, making it easier to maintain and test.
 
-#### Sequence Diagram
-![DeleteLog.png](Images/DeleteSD.png)
-WHICH IS BETTER
-![DeleteLog.png](Images/DeleteSD1.png)
+### 5. Why it is implemented that way: <br>
+- Using a dedicated command class follows the Command Pattern, which separates concerns effectively. Isolating deletion logic into its own class adheres to the Single Responsibility Principle, simplifying debugging and future enhancements without impacting other parts of the system.
+
+### 6. Alternatives considered: <br>
+- One alternative was to embed the deletion logic directly in the parser or UI layer. However, this approach would mix user input handling with business logic, resulting in code that is harder to maintain and test. Delegating deletion to a specialized command class keeps the design modular and scalable.
+
+### Sequence Diagram
+![DeleteLog.png](images/DeleteSD.png)
 
 Diagram Explanation <br>
-1. User Input:
-The user enters delete meal 3 in the CLI.
 
+1. User Input: <br>
+- The user enters `delete meal 3` in the CLI.
 
 2. Parsing: <br>
-The ParserManager receives the command and calls DeleteParser to interpret it. <br>
-DeleteParser returns a DeleteCommand object (with the index adjusted to 0-based indexing) to ParserManager.
+- `HealthBud` receives the command and passes it to the `GeneralParser`.
+- The `GeneralParser` calls `DeleteParser`, which extracts the log type ("meal") and the index (3). The index is then adjusted for 0-based indexing.
+- A `DeleteCommand` object is created and returned to the `GeneralParser`.
 
-
-3. Command Execution:
-ParserManager calls execute() on the DeleteCommand.
-DeleteCommand invokes deleteLog(3) on mealLogs.
-
+3. Command Execution: <br>
+- The `GeneralParser` invokes `execute()` on the `DeleteCommand`.
+- The `DeleteCommand` calls `deleteLog(2)` on the `mealLogs` (since index 3 from the user corresponds to index 2 internally).
+- The log is deleted from the `mealLogs`, and a success message is generated.
 
 4. Outcome: <br>
-An alternative flow distinguishes between:
-
-- Invalid Index: An error message is returned and displayed to the user.
-
-- Valid Index: The meal log is removed from mealLogs and a success message is shown.
+- If the index is invalid, the command returns an error message.
+- If the index is valid, the meal log is removed and a success message is displayed to the user.
 
 This clear separation of user input, command parsing, and execution ensures that the deletion operation is handled in a structured and predictable manner.
 
 
-## Recommend
+## Recommend Command
+The recommend <muscle_group> command provides users with 3 curated workout suggestions based on the specified muscle group, helping users diversify their fitness routines.
 
-### 1. Feature overview
-   The RecommendCommand feature allows users to receive workout recommendations tailored to a specific muscle group. The
-   command takes the form recommend <muscle_group> and responds with a set of 3 recommended exercises. This feature is
-   intended for fitness enthusiasts who may need guidance or variety in their training routines.
+### 1. User Input: <br>
+- The user enters the recommend command followed by a muscle group that they are interested in working out (e.g., `recommend biceps`).
 
-### 2. Implementation details
-   The RecommendCommand class extends the base Command class and overrides the execute method. The command supports inputs
-   like recommend biceps, recommend legs, and so on. The logic of selecting which recommendation to print is
-   encapsulated in a helper method getRecommendation(String input) which parses the input and returns a corresponding
-   string. The execute method is kept clean and only responsible for printing this result to the console. This
-   separation also makes the logic more testable, as the string-producing logic in getRecommendation() can be unit
-   tested independently without checking the output stream.
+### 2. Command Parsing: <br>
+- The RecommendParser handles parsing and validation of the user input. 
+- It checks that at least one argument (a muscle group) is present. 
+- It uses a switch-case on the muscle group to determine the recommended exercises. 
+- If the muscle group is unrecognized, it throws a HealthBudException with guidance.
 
-### 3. Why this design
-- Separation of concerns: By moving the recommendation content generation to a separate method, we improve readability
-  and testability.
-- Scalability: Adding new muscle groups or modifying messages is centralized in getRecommendation(), making it easier to
-  extend.
-- Robustness: Proper input validation and informative error messages ensure a good user experience.
+### 3. The `RecommendCommand` executes as follows: <br>
+- Once constructed, the RecommendCommand calls Ui.printMessage() with the appropriate recommendation message.
+- The execute() method only handles display and does not contain logic beyond that.
 
-### 4. Alternatives considered
-- Using Enums for muscle groups: Initially considered using an enum with mappings to lists of exercises. While this
-  improves type-safety, it adds overhead and less flexibility for user input variations.
-- Reading recommendations from a file: Considered storing recommendations in a file, but added unnecessary I/O for a
-  static set of data.
+### 4. How the feature is implemented: <br>
+- The command string is split and validated in RecommendParser.
+- A corresponding message for each muscle group is hardcoded into the switch-case.
+- RecommendCommand simply wraps this message and prints it during execution.
 
-### 5. Sequence Diagrams
-- {to be updated using plantUML}
+### 5. Why it is implemented that way: <br>
+- Separation of Concerns: Logic for parsing and message generation is in the parser, while command execution is kept simple and focused.
+- Testability: Easy to write unit tests for RecommendParser without needing to simulate UI output.
+- Readability: Clean execute() method and well-structured parser make the code intuitive and maintainable
 
-### 6. Future Improvements
-- Store recommendations in a config file or JSON for easier modification.
+### 6. Alternatives considered: <br>
+- Enums for muscle groups: More structured but restrictive; dropped in favor of flexible string matching.
+- External file storage for recommendations: Overhead for static data; current implementation is simpler and faster.
 
+### Sequence Diagrams
+![Recommend_Sequence_Diagram](Images/RecommendSD.png)
 
-### 6. Future Improvements:
-   Enhanced Search Capabilities:
-   Incorporate multi-keyword search, case-insensitive matching, or fuzzy search to better capture user intent.
-   UI Feedback Enhancements:
-   Improve user feedback by highlighting the keyword in the matching results or providing suggestions when no matches are found.
-   Support for Additional Log Types:
-   As the application evolves, extend the command to support searching in other log categories (e.g., cardio or pb).
-   Configuration Options:
-   Allow users to customize search parameters or filter results based on date ranges or other log attributes.
+Diagram Explanation <br>
+
+1. User Input: <br>
+- The user enters recommend <muscle_group> in the CLI.
+
+2. Parsing: <br>
+- RecommendParser parses the input and creates a RecommendCommand with a list of exercises.
+
+3. Command Execution: <br>
+- RecommendCommand.execute() is called. It sends the exercise list to Ui to display.
+
+4. Outcome: <br>
+An alt block handles:
+- Valid Input: The recommended exercises are displayed and a success message is returned.
+- Invalid Input: An exception is thrown and an error message is shown to the user.
+
+This structure clearly separates parsing, command creation, and UI interaction for robust handling.
+
 
 ## BMICommand
+
 ### 1. Feature overview:
 The **BMICommand** feature allows users to calculate their Body Mass Index (BMI) and receive a classification (e.g., underweight, normal weight, overweight, obese). It’s useful for users who want a quick health metric based on their height and weight inputs.
 ### 2. Implementation details:
@@ -180,54 +204,10 @@ Using an External Library
 Given the simplicity of the BMI formula, an external library would add unnecessary complexity.
 
 5. Sequence Diagrams
-6. Future Improvements
+   ![BMI_Sequence_Diagram](images/BMISD.png)
 
-## SearchCommand
-### 1. Feature overview:
-The SearchCommand feature allows users to search through their logs by either a specific date or a keyword. This enables users to quickly filter and locate log entries—for example, finding all logs on a particular day or identifying entries that mention a specific term.
-### 2. Implementation details:
-#### Inheritance:
-Inherits from OneLogCommand (which in turn extends the base Command class) to operate on a single LogList.
-#### Immutable Fields:
-Stores the search parameters (either date or keyword) as immutable (final) fields.
-#### Dual Search Logic:
-implements two search approaches:
-1. **Keyword Search**: Searches through the log entries for a specific keyword.
-2. **Date Search**: Filters log entries based on a specific date.
-### 3. Why this design:
-Single Responsibility:
-The search functionality is isolated within its own command, ensuring the logic is clean, focused, and easy to manage.
-
-Readability & Testability:
-The clear separation between date-based and keyword-based searches simplifies both understanding and unit testing.
-
-Extensibility:
-Future enhancements—such as combining filters or adding new search criteria—can be integrated with minimal changes to the existing structure.
-Readability & Testability:
-The concise code structure makes it easy to unit test and maintain.
-
-Extensibility:
-Future changes (e.g., additional BMI categories or metrics) can be made in this class without impacting other parts of the system.
-###  4. Alternatives considered:
-Extending AllLogsCommand:
-One alternative was to have the search functionality span multiple log types simultaneously by extending AllLogsCommand. However, this approach was rejected because it would complicate the search logic and user interface. Users typically search within a single log category, so isolating the search to one log list made the command simpler and clearer.
-
-Parser-Only Filtering:
-Another alternative was to handle filtering entirely within the parser, returning a filtered list rather than a command that executes a search. This was not chosen because encapsulating the search behavior in a dedicated command class improves separation of concerns and aligns with the command-based architecture used throughout the project.
-
-5. Sequence Diagrams 
-### Future Improvements
-Combined Search Criteria:
-Future enhancements could allow users to combine search parameters (e.g., filtering by both date and keyword simultaneously) to refine their search results further.
-
-Advanced Filtering Options:
-Implementing range-based date searches, fuzzy matching for keywords, or even categorizing results by relevance could improve user experience.
-
-Result Ranking & Pagination:
-For logs with many entries, adding functionality to rank results by relevance or paginate long lists could enhance usability.
-
-Improved Logging & Metrics:
-Incorporating logging of search queries and performance metrics could help monitor usage patterns and optimize search efficiency in future releases.
+6. ### Future Improvements
+   Future improvements for the BMI command could include personalized BMI thresholds based on user profiles, comprehensive historical tracking, and clear visualizations of BMI changes over time for improved health insights.
 
 
 
@@ -300,35 +280,43 @@ Daily Water Intake Goal (/w), Daily Calorie Intake Goal (/cal), Weight Goal (/kg
 
 ### 2. Implementation Details
 
-The goal command is implemented as part of a switch statement in the main command handling logic. Here's how it works:
-Upon entering the goal command using the command "add goal", the user is greeted and shown their current goals from the
-singleton Goals class instance. The chatbot enters a loop where it listens for specific goal-editing commands:
-/w [value] updates the daily water goal, /cal [value] updates the daily calorie goal, /kg [value] updates the target
-weight progress prompts the user to select a day to view progress data from waterLogs, mealLogs, and weight history.
-The user inputs are parsed with Scanner, and exceptions such as InvalidDateException and InvalidGoalException
-are handled gracefully.
+The add goal command is implemented in the main parser logic using a switch statement. Here's how it works:
+
+- When the user enters add goal /w [value] /cal [value] /kg [value], the input is parsed using AddGoalParser.
+- If any parameters are missing (e.g., no /cal provided), they are auto-filled using the current values stored 
+in the Goals singleton instance.
+- ParserParameters extracts the parameters into a key-value map.
+- AddGoalCommand is then created with the parsed values and executed.
+- If the values differ from the current ones, Goals.updateGoals() updates the stored values, and the goal is 
+logged to the goalLogs list.
+- Track function (called with track goal /d <date>) as well as the view function (called with view goal) are 
+supplementary functions provided to increase the accountability of the user by giving him easy access to previous and
+current stats.
+
+Exceptions such as InvalidGoalException and InvalidDateFormatException are handled gracefully to ensure robustness.
 
 ### 3. Why This Design
-  Simplicity: Using a command-line loop with conditionals provides clear control flow and is easy to debug.
-  Singleton Pattern: Goals.getInstance() ensures consistent access and modification of user goals.
-  User-Friendly Prompts: Each interaction provides guidance on valid inputs and current status.
-  Separation of Concerns: Goal logic is kept distinct from log retrieval (waterLogs, mealLogs), enabling modular testing.
+- Simplicity: A single command (add goal) handles all updates in one go, keeping the interaction concise 
+and easy to use.
+- Singleton Pattern: Using Goals.getInstance() ensures centralized access to the current user goals across the app.
+- Auto-Fill Support: Missing parameters default to current goal values, streamlining repeated updates.
+- Separation of Concerns: Goal parsing and updating are kept modular and separate from logging and UI logic
 
 ### 4. Alternatives Considered
-   Command Pattern: We considered implementing a command design pattern to encapsulate each action
-   (e.g., update water goal), but deemed it too complex for the scope.
-   GUI-based input: Given the chatbot nature and CLI interaction, we opted not to build a graphical interface.
-   Database-backed goal storage: For now, data is likely held in-memory for simplicity; persistent storage could
-   be added later.
+- Command Pattern: We considered creating individual commands for each goal type (e.g., SetWaterGoalCommand), 
+but found a unified approach more straightforward for the CLI.
+- Interactive CLI Loop: Earlier versions used a conversational loop for goal editing, but it was replaced by a 
+single-line command to reduce complexity.
+- Persistent Storage: While current goal data is stored in-memory and appended to the log file, we plan to enhance 
+persistence for full session retention.
 
 ### 5. Sequence Diagrams
-
+![GoalSD.png](Images/GoalSD.png)
 ### 6. Future Improvements
-   Input validation: Add regex or parsing to ensure valid numeric inputs.
-   Persistent Storage: Save goals and logs to a file or database for state retention across sessions.
-   Multi-user support: Refactor to support multiple user profiles.
-   Goal recommendations: Suggest goals based on user history or health data.
-   GUI/Web Interface: Build a frontend to visualize progress and make goal-setting more intuitive.
+- Input Validation: Use regex or stricter parsing to ensure only valid integers are accepted.
+- Persistent Goal Storage: Store and reload goals from file or database to retain state between sessions.
+- Multi-User Support: Refactor the singleton Goals class to support different profiles.
+- Goal Recommendations: Use history from logs (e.g., average water intake) to suggest realistic goal values
 
 ## Product scope
 ### Target user profile

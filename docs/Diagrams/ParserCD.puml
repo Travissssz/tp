@@ -1,49 +1,91 @@
 @startuml
+hide circle
+skinparam classAttributeIconSize 0
 title HealthBud Parser Flow
 skinparam defaultFontSize 14
 skinparam arrowThickness 1
 
+' Central parser manager
 class ParserManager {
-  +handleInput(goalLogs: LogList, pbLogs: LogList, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, cardioLogs: LogList, input: String): boolean
+  +handleInput(input: String): boolean
 }
 
+' Specific parser classes with expected input formats and extra LogList parameters
 class BMIParser {
+  +parse(input: String): Command
+  ' Expected input: "bmi /w <weight> /h <height>"
 }
+
 class ClearParser {
+  +parse(input: String, pbLogs: LogList, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, cardioLogs: LogList): Command
+  ' Expected input: "clear <logType>"
 }
+
 class DeleteParser {
+  +parse(input: String, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, pbLogs: LogList, cardioLogs: LogList): Command
+  ' Expected input: "delete <logType> <index>"
 }
+
 class ListParser {
+  +parse(input: String, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, pbLogs: LogList, cardioLogs: LogList): Command
+  ' Expected input: "list <logType>"
 }
+
 class RecommendParser {
+  +parse(input: String): Command
+  ' Expected input: "recommend <muscle_group>"
 }
+
 class SearchParser {
+  +parse(input: String, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, pbLogs: LogList, cardioLogs: LogList, goalLogs: LogList): Command
+  ' Expected input: "search <logType> /d <date> OR /k <keyword>"
 }
+
 class StatusParser {
+  +parse(input: String, goalLogs: LogList, pbLogs: LogList, mealLogs: LogList, workoutLogs: LogList, waterLogs: LogList, cardioLogs: LogList): Command
+  ' Expected input: "status change <cutting|bulking> OR status report"
 }
+
 class SumParser {
+  +parse(input: String, mealLogs: LogList, waterLogs: LogList, cardioLogs: LogList): Command
+  ' Expected input: "sum <cal|vol|cardio> /d <date>"
 }
 
+' Add-command parsers grouped under AddParser
 class AddParser {
-  +parse(subCommand: String, mealLogs: LogList, waterLogs: LogList, cardioLogs: LogList, pbLogs: LogList, workoutLogs: LogList, goalLogs: LogList, input: String)
+  +parse(subCommand: String, mealLogs: LogList, waterLogs: LogList, cardioLogs: LogList, pbLogs: LogList, workoutLogs: LogList, goalLogs: LogList, input: String): Command
 }
 
-' AddParser points to its specific add-command parsers
 class AddCardioParser {
-}
-class AddMealParser {
-}
-class AddPersonalBestParser {
-}
-class AddWaterParser {
-}
-class AddWorkoutParser {
+  +parse(cardioLogs: LogList, input: String): Command
+  ' Expected subcommand: "cardio"
 }
 
+class AddMealParser {
+  +parse(mealLogs: LogList, input: String): Command
+  ' Expected subcommand: "meal"
+}
+
+class AddPersonalBestParser {
+  +parse(pbLogs: LogList, input: String): Command
+  ' Expected subcommand: "pb"
+}
+
+class AddWaterParser {
+  +parse(waterLogs: LogList, input: String): Command
+  ' Expected subcommand: "water"
+}
+
+class AddWorkoutParser {
+  +parse(workoutLogs: LogList, input: String): Command
+  ' Expected subcommand: "workout"
+}
+
+' General Command produced by any parser
 class Command {
 }
 
-' Relationships from ParserManager to normal parsers and AddParser
+' Relationships from ParserManager to specific parsers
 ParserManager --> BMIParser
 ParserManager --> ClearParser
 ParserManager --> DeleteParser
@@ -61,7 +103,7 @@ AddParser --> AddPersonalBestParser
 AddParser --> AddWaterParser
 AddParser --> AddWorkoutParser
 
-' All parser classes point to Command
+' All parser classes produce a Command (arrow points to a single Command box)
 BMIParser --> Command
 ClearParser --> Command
 DeleteParser --> Command

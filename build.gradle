@@ -54,4 +54,11 @@ tasks.withType(JavaExec) {
     systemProperty "file.encoding", "UTF-8"
 }
 
+run {
+    enableAssertions = true
+}
+
+test {
+    jvmArgs '-ea'
+}
 

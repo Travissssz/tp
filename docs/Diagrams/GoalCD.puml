@@ -1,69 +1,48 @@
-/*
 @startuml
 ' https://plantuml.com/class-diagram
 
-package seedu.healthbud.log {
-    class Log {
-        +Log(String date, String type)
-    }
+' Legend:
+' -->    navigability/association (used in method or field)
+' ..>    dependency (used as parameter/return/throws)
+' --|>   inheritance
 
-    class Goals {
-        -dailyWaterGoal: String
-        -dailyCalorieGoal: String
-        -weightGoal: String
-        -weeklyWeightProgress: String
-        -Goals(String, String, String, String, String)
-        +getInstance(): Goals
-        +updateGoals(water: String, calorie: String, weight: String): void
-        +setDailyWaterGoal(String): void
-        +setDailyCalorieGoal(String): void
-        +setWeightGoal(String): void
-        +setWeeklyWeightProgress(String): void
-        +getDailyWaterGoal(): String
-        +getDailyCalorieGoal(): String
-        +getWeightGoal(): String
-        +getWeeklyWeightProgress(): String
-        +toString(): String
-    }
+Goals --|> Log
+Goals : - static instance: Goals
+Goals : - dailyWaterGoal: String
+Goals : - dailyCalorieGoal: String
+Goals : - weightGoal: String
+Goals : - weeklyWeightProgress: String
+Goals : + getInstance(): Goals
+Goals : + updateGoals(water: String, calorie: String, weight: String): void
+Goals : + setDailyWaterGoal(goal: String): void
+Goals : + setDailyCalorieGoal(goal: String): void
+Goals : + setWeightGoal(goal: String): void
+Goals : + setWeeklyWeightProgress(progress: String): void
+Goals : + getDailyWaterGoal(): String
+Goals : + getDailyCalorieGoal(): String
+Goals : + getWeightGoal(): String
+Goals : + getWeeklyWeightProgress(): String
+Goals : + toString(): String
 
-    Log <|-- Goals
-}
+AddGoalParser : + parse(goalLogs: LogList, input: String): AddGoalCommand
+AddGoalParser : - addMissingParameters(input: String): String
+AddGoalParser ..> Goals : uses
+AddGoalParser ..> AddGoalCommand : creates
+AddGoalParser ..> InvalidGoalException : throws
 
+SingleLogCommand : - input: String
+SingleLogCommand : - logList: LogList
+SingleLogCommand --> LogList
 
-package seedu.healthbud.command.onelogandinput {
-    class OneLogCommand {
-        +OneLogCommand(LogList, String)
-    }
-
-    class AddGoalCommand {
-        -waterGoal: String
-        -calorieGoal: String
-        -weightGoal: String
-        -weeklyWeightProgress: String
-        +AddGoalCommand(LogList, String, String, String, String)
-        +execute(): void
-    }
-
-    OneLogCommand <|-- AddGoalCommand
-    AddGoalCommand --> Goals : uses
-}
-
-package seedu.healthbud.parser.addcommandparser {
-    class AddGoalParser {
-        +parse(LogList, String): AddGoalCommand throws InvalidGoalException
-    }
-
-    AddGoalParser --> AddGoalCommand : creates
-    AddGoalParser --> Goals : accesses singleton
-}
-
-class LogList
-class Ui
-class InvalidGoalException
-
-AddGoalCommand --> Ui : calls
-AddGoalParser --> InvalidGoalException : throws
-
+AddGoalCommand --|> SingleLogCommand
+AddGoalCommand : - static waterGoal: String
+AddGoalCommand : - static calorieGoal: String
+AddGoalCommand : - static weightGoal: String
+AddGoalCommand : - static weeklyWeightProgress: String
+AddGoalCommand : + AddGoalCommand(LogList, String, String, String, String)
+AddGoalCommand : + execute(): void
+AddGoalCommand --> Goals : uses singleton
+AddGoalCommand ..> LogList : modifies
+AddGoalCommand ..> Storage : calls append
 
 @enduml
-*/
