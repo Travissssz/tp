@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class ParserParameters {
     public static Map<String, String> parseParameters(String input) {
+        assert input != null : "Input should not be null";
+
         Map<String, String> params = new HashMap<>();
         String[] tokens = input.split("\\s+");
 

@@ -7,6 +7,10 @@ public class Water extends Log {
 
     public Water(String amount, String date, String time){
         super(date, "water");
+
+        assert amount != null : "Amount should not be null";
+        assert time != null : "Time should not be null";
+
         this.amount = amount;
         this.time = time;
     }

@@ -5,7 +5,7 @@ public class Ui {
     /**
      * New line and indent used for formatting output.
      */
-    public static final String NEW_LINE = "\n     ";
+    public static final String NEW_LINE = "\n    ";
 
     /**
      * Prints a message with indentation.
@@ -70,20 +70,20 @@ public class Ui {
                 + "2. bye - Exit the program" + NEW_LINE
                 + "3. recommend <muscle_group> - Get workout recommendations" + NEW_LINE
                 + "4. bmi /w <weight_in_kg> /h <height_in_m> - Calculate your BMI" + NEW_LINE
-                + "5. add workout <exercise> /w <weight in kg> /r <reps> /s <sets> /d <date> " +
+                + "5. add workout <exercise> /w <weight in kg> /r <reps> /s <sets> /d <DD/MM/YYYY> " +
                 "- Add a workout log" + NEW_LINE
-                + "6. add meal <meal_name> /cal <calories> /d <date> /t <time> - Add a meal log" + NEW_LINE
-                + "7. add water /ml <volume> /d <date> /t <time> - Add a water log" + NEW_LINE
-                + "8. add pb <exercise> /w <weight_in_kg> /d <date> - Record a personal best" + NEW_LINE
-                + "9. sum <cal|vol> /d <date> - Sum up the total calories/water for the day" + NEW_LINE
+                + "6. add meal <meal_name> /cal <calories> /d <DD/MM/YYYY> /t <time> - Add a meal log" + NEW_LINE
+                + "7. add water /ml <volume> /d <DD/MM/YYYY> /t <time> - Add a water log" + NEW_LINE
+                + "8. add pb <exercise> /w <weight_in_kg> /d <DD/MM/YYYY> - Record a personal best" + NEW_LINE
+                + "9. sum <cal|vol> /d <DD/MM/YYYY> - Sum up the total calories/water for the day" + NEW_LINE
                 + "10. clear <pb|meal|workout|water> - Clear the respective log" + NEW_LINE
-                + "11. add cardio <exercise> /s <speed> /i <incline> /t <duration> /d <date> - Add a cardio log"
+                + "11. add cardio <exercise> /s <speed> /i <incline> /t <duration> /d <DD/MM/YYYY> - Add a cardio log"
                 + NEW_LINE
                 + "12. view goals - to view all goals" + NEW_LINE
                 + "13  add goal /w <waterGoals /c <calorieGoals> /m <weightGoals> - to edit personal goals" + NEW_LINE
                 + "14. status change <cutting/bulking> - Update your cutting/bulking status." + NEW_LINE
                 + "15. status report - View your current cutting/bulking progress" + NEW_LINE
-                + "16. search <logType> /d <date> OR search <logType> /k <keyword> - Search for logs" + NEW_LINE);
+                + "16. search <logType> /d <DD/MM/YYYY> OR search <logType> /k <keyword> - Search for logs" + NEW_LINE);
     }
 
     /**

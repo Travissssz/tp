@@ -17,6 +17,7 @@ public class StatusCommand extends MultiLogCommand {
 
     @Override
     public void execute(){
+        assert message != null : "Status message should not be null";
         Ui.printMessage(message);
     }
 }

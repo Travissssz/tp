@@ -32,10 +32,10 @@ class TrackGoalCommandTest {
         LogList meal = new LogList();
         LogList water = new LogList();
 
-        new AddMealCommand(meal, "", "Lunch", "300", "2024-04-01", "13:00").execute();
-        new AddWaterCommand(water, "", "500", "2024-04-01", "13:10").execute();
+        new AddMealCommand(meal,"Lunch", "300", "01/04/2024", "13:00").execute();
+        new AddWaterCommand(water, "500", "01/04/2024", "13:10").execute();
 
-        TrackGoalCommand command = new TrackGoalCommand("2024-04-01", empty, empty, meal, empty, water, empty);
+        TrackGoalCommand command = new TrackGoalCommand("01/04/2024", empty, empty, meal, empty, water, empty);
         String output = getCommandOutput(command);
         String expected = "Here is your goal progress for 01 Apr 2024: ";
         assertEquals(expected, output.split("\n")[0]);
@@ -43,14 +43,14 @@ class TrackGoalCommandTest {
 
     @Test
     void parse_validCommand_expectCorrectOutput() throws Exception {
-        String input = "track goal /d 2024-04-01";
+        String input = "track goal /d 01/04/2024";
 
         LogList empty = new LogList();
         LogList meal = new LogList();
         LogList water = new LogList();
 
-        new AddMealCommand(meal, "", "Lunch", "300", "2024-04-01", "13:00").execute();
-        new AddWaterCommand(water, "", "500", "2024-04-01", "13:10").execute();
+        new AddMealCommand(meal,"Lunch", "300", "01/04/2024", "13:00").execute();
+        new AddWaterCommand(water,"500", "01/04/2024", "13:10").execute();
 
         TrackGoalCommand command = TrackGoalParser.parse(input, empty, empty, meal, empty, water, empty);
         String output = getCommandOutput(command);

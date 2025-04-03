@@ -11,8 +11,11 @@ public class AddPersonalBestCommand extends SingleLogCommand {
     private final String weight;
     private final String date;
 
-    public AddPersonalBestCommand(LogList pbLogs, String input, String name, String weight, String date) {
-        super(pbLogs, input);
+    public AddPersonalBestCommand(LogList pbLogs, String name, String weight, String date) {
+        super(pbLogs);
+
+        assert pbLogs != null : "LogList (pbLogs) should not be null";
+
         this.name = name;
         this.weight = weight;
         this.date = date;

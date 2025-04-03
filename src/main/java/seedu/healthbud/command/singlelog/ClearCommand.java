@@ -6,13 +6,13 @@ import seedu.healthbud.command.SingleLogCommand;
 public class ClearCommand extends SingleLogCommand {
 
 
-    public ClearCommand(String input, LogList logList) {
-        super(logList, input);
+    public ClearCommand(LogList logList) {
+        super(logList);
+        assert logList != null : "LogList should not be null";
     }
 
     @Override
     public void execute() {
-        assert input != null && !input.trim().isEmpty() : "Input must be provided for Clear command";
         logList.clearLogs();
     }
 }

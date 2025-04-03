@@ -67,4 +67,33 @@ class AddPersonalBestCommandTest {
 
         assertThrows(InvalidPersonalBestException.class, () -> AddPersonalBestParser.parse(pbLogs, input));
     }
+
+    @Test
+    void addPersonalBest_emptyWeight_throwsException() {
+        LogList pbLogs = new LogList();
+        String input = "add pb pull-up /w  /d 01-01-2025";
+        assertThrows(InvalidPersonalBestException.class, () -> AddPersonalBestParser.parse(pbLogs, input));
+    }
+
+    @Test
+    void addPersonalBest_emptyDate_throwsException() {
+        LogList pbLogs = new LogList();
+        String input = "add pb deadlift /w 100 /d  ";
+        assertThrows(InvalidPersonalBestException.class, () -> AddPersonalBestParser.parse(pbLogs, input));
+    }
+
+    @Test
+    void addPersonalBest_invalidKey_throwsException() {
+        LogList pbLogs = new LogList();
+        String input = "add pb snatch /weight 90 /d 01-01-2025";
+        assertThrows(InvalidPersonalBestException.class, () -> AddPersonalBestParser.parse(pbLogs, input));
+    }
+
+    @Test
+    void addPersonalBest_extraKey_throwsException() {
+        LogList pbLogs = new LogList();
+        String input = "add pb pushup /w 50 /d 01-01-2025 /note intense";
+        assertThrows(InvalidPersonalBestException.class, () -> AddPersonalBestParser.parse(pbLogs, input));
+    }
+
 }

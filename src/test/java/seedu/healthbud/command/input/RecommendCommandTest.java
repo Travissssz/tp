@@ -1,7 +1,6 @@
 package seedu.healthbud.command.input;
 
 import org.junit.jupiter.api.Test;
-import seedu.healthbud.exception.HealthBudException;
 import seedu.healthbud.exception.InvalidRecommendException;
 import seedu.healthbud.parser.RecommendParser;
 
@@ -109,7 +108,7 @@ class RecommendCommandTest {
     @Test
     void recommendWorkout_invalidMuscle_expectFailure() {
         String input = "recommend toes";
-        assertThrows(HealthBudException.class, () -> RecommendParser.parse(input));
+        assertThrows(InvalidRecommendException.class, () -> RecommendParser.parse(input));
     }
 
     @Test

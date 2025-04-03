@@ -10,6 +10,12 @@ public class Workout extends Log {
 
     public Workout(String name, String reps, String sets, String date, String weight) {
         super(date, "workout");
+
+        assert name != null : "Workout name should not be null";
+        assert reps != null : "Reps should not be null";
+        assert sets != null : "Sets should not be null";
+        assert weight != null : "Weight should not be null";
+
         this.name = name;
         this.reps = reps;
         this.sets = sets;

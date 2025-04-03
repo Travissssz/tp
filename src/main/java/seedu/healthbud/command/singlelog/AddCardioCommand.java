@@ -13,36 +13,18 @@ public class AddCardioCommand extends SingleLogCommand {
     private final String time;
     private final String date;
 
-    public AddCardioCommand(LogList cardioLogs, String input, String name, String sets,
+    public AddCardioCommand(LogList cardioLogs, String name, String sets,
                             String intensity, String time, String date) {
-        super(cardioLogs, input);
+        super(cardioLogs);
+
+        assert cardioLogs != null : "LogList (cardioLogs) should not be null";
+
         this.name = name;
         this.sets = sets;
         this.intensity = intensity;
         this.time = time;
         this.date = date;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSets() {
-        return sets;
-    }
-
-    public String getIntensity() {
-        return intensity;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
 
     @Override
     public void execute() {

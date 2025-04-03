@@ -6,6 +6,7 @@ public abstract class InputCommand implements Command {
     protected String input;
 
     public InputCommand(String input) {
+        assert input != null : "Input should not be null";
         this.input = input;
     }
 }

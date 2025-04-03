@@ -19,6 +19,9 @@ public class BMICommand extends InputCommand {
 
     public void execute() {
 
+        assert weight > 0 : "Weight should be positive at execution time.";
+        assert height > 0 : "Height should be positive at execution time.";
+
         double bmi = weight / (height * height);
         if (bmi < 18.5) {
             Ui.printMessage("Your BMI is: " + String.format("%.2f", bmi) + ", you are underweight.");

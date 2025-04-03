@@ -1,7 +1,7 @@
 @startuml
 actor User
 participant ":HealthBud" as HealthBud
-participant ":GeneralParser" as GeneralParser
+participant ":ParserManager" as ParserManager
 participant ":AddParser" as AddParser
 participant ":AddWorkoutParser" as AddWorkoutParser
 participant ":ParserParameters" as ParserParameters
@@ -13,50 +13,51 @@ participant "new:Workout" as Workout
 User -> HealthBud : add workout
 activate HealthBud
 
-HealthBud -> GeneralParser : handleInput(exerciseName, sets, reps, dates, weight)
-activate GeneralParser
+HealthBud -> ParserManager : handleInput(
+activate ParserManager
 
-GeneralParser -> AddParser : parse(input)
+ParserManager -> AddParser : parse()
 activate AddParser
 
-AddParser -> AddWorkoutParser : parse(workoutLogs, input)
+AddParser -> AddWorkoutParser : parse()
 activate AddWorkoutParser
 
-AddWorkoutParser -> ParserParameters : parseParameters(input)
+AddWorkoutParser -> ParserParameters : parseParameters()
 activate ParserParameters
-ParserParameters --> AddWorkoutParser : params {key:value}
+ParserParameters --> AddWorkoutParser : params
 deactivate ParserParameters
 
 AddWorkoutParser -> DateParser : formatDate()
 activate DateParser
-DateParser --> AddWorkoutParser : formattedDate
+DateParser --> AddWorkoutParser : formatDate
 deactivate DateParser
 
-AddWorkoutParser --> AddParser : AddWorkoutCommand
+AddWorkoutParser --> AddParser : new AddWorkoutCommand()
 deactivate AddWorkoutParser
 
-AddParser --> GeneralParser : AddWorkoutCommand
+AddParser --> ParserManager : AddWorkoutCommand
 deactivate AddParser
 
-GeneralParser -> AddWorkoutCommand : execute()
+ParserManager -> AddWorkoutCommand : execute()
 activate AddWorkoutCommand
 
-AddWorkoutCommand -> Workout : new(values)
+AddWorkoutCommand -> Workout : new()
 activate Workout
 Workout --> AddWorkoutCommand
 deactivate Workout
 
 AddWorkoutCommand -> LogList : addLog(new Workout)
 activate LogList
+LogList -> LogList : logs.add(log)
+LogList -> Storage : appendLogToFile(log)
 LogList --> AddWorkoutCommand
 deactivate LogList
 
-AddWorkoutCommand --> GeneralParser
+AddWorkoutCommand --> ParserManager
 deactivate AddWorkoutCommand
 
-GeneralParser --> HealthBud
-deactivate GeneralParser
+ParserManager --> HealthBud
+deactivate ParserManager
 
-HealthBud --> User
 deactivate HealthBud
 @enduml

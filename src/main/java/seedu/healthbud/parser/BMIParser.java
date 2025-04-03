@@ -1,34 +1,39 @@
 package seedu.healthbud.parser;
 
 import seedu.healthbud.command.input.BMICommand;
-import seedu.healthbud.exception.HealthBudException;
 import seedu.healthbud.exception.InvalidBMIException;
+
+import java.util.Map;
 
 public class BMIParser {
 
-    public static BMICommand parse(String input) throws HealthBudException, InvalidBMIException {
-        assert input != null && !input.trim().isEmpty() : "Input should not be null or empty";
+    public static BMICommand parse(String input) throws InvalidBMIException {
+        assert input != null : "Input should not be null";
 
         if (!input.contains("/h") || !input.contains("/w")) {
             throw new InvalidBMIException();
         }
 
-        String[] parts = input.trim().split("/");
-        if (parts.length < 3) {
+        input = input.substring("bmi".length()).trim();
+
+        Map<String, String> param = ParserParameters.parseParameters(input);
+
+        if (!param.containsKey("w") || param.get("w").isEmpty()
+                || !param.containsKey("h") || param.get("h").isEmpty()) {
             throw new InvalidBMIException();
         }
 
-        try {
-            double weight = Double.parseDouble(parts[1].substring(1).trim()); // after 'w'
-            double height = Double.parseDouble(parts[2].substring(1).trim()); // after 'h'
-
-            if (weight <= 0 || height <= 0) {
-                throw new HealthBudException("Weight and height must be greater than zero.");
-            }
-
-            return new BMICommand(input, weight, height);
-        } catch (NumberFormatException e) {
-            throw new HealthBudException("Invalid number format for weight or height.");
+        if (!param.get("w").matches("\\d+") || !param.get("h").matches("^\\d+(\\.\\d+)?$")) {
+            throw new InvalidBMIException();
         }
+
+        double weight = Double.parseDouble(param.get("w"));
+        double height = Double.parseDouble(param.get("h"));
+
+        if(height > 3.0 || height < 0.2 || weight <= 0) {
+            throw new InvalidBMIException();
+        }
+
+        return new BMICommand(input, weight, height);
     }
 }

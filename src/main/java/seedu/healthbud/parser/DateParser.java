@@ -14,40 +14,50 @@ public class DateParser {
 
     // List of possible input date formats to try
     private static final List<String> INPUT_FORMATS = Arrays.asList(
-            "yyyy-MM-dd",       // ISO format (e.g., 2023-12-25)
-            "MM/dd/yyyy",      // US format (e.g., 12/25/2023)
-            "dd/MM/yyyy",      // European format (e.g., 25/12/2023)
-            "MMM dd, yyyy",    // (e.g., Dec 25, 2023)
-            "MMMM dd, yyyy",   // (e.g., December 25, 2023)
-            "yyyyMMdd",        // (e.g., 20231225)
-            "dd-MM-yyyy",      // (e.g., 25-12-2023)
-            "EEE, MMM dd, yyyy", // (e.g., Mon, Dec 25, 2023)
-            "yyyy/MM/dd",      // (e.g., 2023/12/25)
-            "MM-dd-yyyy",      // (e.g., 12-25-2023)
-            "MMM dd yyyy"
+            "dd/MM/yy",         // e.g., 12/11/25 -> 12 Nov 2025 (due to pivot date)
+            "dd/MM/yyyy",       // e.g., 25/12/2023
+            "dd-MM-yy",         // e.g., 12-11-23 -> 12 Nov 2023 (due to pivot date)
+            "dd-MM-yyyy",       // e.g., 25-12-2023
+            "dd MM yy",        // e.g., 25 12 23
+            "dd MM yyyy",      // e.g., 25 12 2023
+            "ddMMyy",       // e.g., 25 Nov 23
+            "ddMMyyyy",     // e.g., 25112023
+            "dd MMM yy",       // e.g., 25 Dec 23
+            "dd MMM yyyy",     // e.g., 25 Dec 2023
+            "dd MMMM yy",      // e.g., 25 December 23
+            "dd MMMM yyyy",    // e.g., 25 December 2023
+            "MMM dd, yyyy",     // e.g., Dec 25, 2023
+            "MMMM dd, yyyy",    // e.g., December 25, 2023
+            "MMM dd yyyy",
+            "MMM dd, yy"        // e.g., Dec 25, 23
+
+
     );
 
     public static String formatDate(String inputDate) throws InvalidDateFormatException {
+        assert inputDate != null : "Input date should not be null";
+
         if (inputDate == null || inputDate.trim().isEmpty()) {
-            throw new InvalidDateFormatException(inputDate,INPUT_FORMATS);
+            throw new InvalidDateFormatException();
         }
 
-        // Try each format until one works
         for (String format : INPUT_FORMATS) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat(format);
                 sdf.setLenient(false); // Strict parsing
+
+                // If using a two-digit year format, explicitly set the two-digit year start to 2000.
+                if (format.contains("yy") && !format.contains("yyyy")) {
+                    sdf.set2DigitYearStart(new SimpleDateFormat("yyyy").parse("2000"));
+                }
                 Date date = sdf.parse(inputDate);
 
-                // Format to the desired output
                 SimpleDateFormat outputSdf = new SimpleDateFormat(OUTPUT_FORMAT);
                 return outputSdf.format(date);
             } catch (ParseException e) {
                 // Try next format
             }
         }
-
-        throw new InvalidDateFormatException(inputDate,INPUT_FORMATS);
-
+        throw new InvalidDateFormatException();
     }
 }

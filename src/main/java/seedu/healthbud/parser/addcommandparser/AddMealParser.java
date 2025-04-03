@@ -7,7 +7,10 @@ import seedu.healthbud.exception.InvalidMealException;
 import seedu.healthbud.parser.DateParser;
 import seedu.healthbud.parser.ParserParameters;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class AddMealParser {
@@ -16,37 +19,23 @@ public class AddMealParser {
     public static AddMealCommand parse(LogList mealLogs, String input)
             throws InvalidMealException, InvalidDateFormatException {
 
-        String[] parts = input.trim().split(" ");
-
-        if (parts.length < 2) {
-            throw new InvalidMealException();
-        }
-
-        assert input != null : "Invalid meal input!";
+        assert input != null : "Input should not be null";
         if (!input.contains("/cal ") || !input.contains("/d ") || !input.contains("/t ")) {
             throw new InvalidMealException();
         }
 
-        input = input.replaceFirst("add meal", "").trim();
+        input = input.substring("add meal".length()).trim();
 
-        if (input.isEmpty()) {
+        String name = input.substring(0, input.indexOf("/")).trim();
+
+        Map<String, String> param = ParserParameters.parseParameters(input.substring(name.length()));
+        Set<String> allowedKeys = new HashSet<>(Arrays.asList("cal", "d", "t"));
+        if (!param.keySet().equals(allowedKeys)) {
             throw new InvalidMealException();
         }
 
-        int firstParamIndex = input.indexOf('/');
-        String name;
-        if (firstParamIndex > 0) {
-            name = input.substring(0, firstParamIndex).trim();
-        } else {
-            name = "";  // No name provided before parameters
-        }
-        Map<String, String> param = ParserParameters.parseParameters(input.substring(firstParamIndex));
-
-
-        if (name.isEmpty() ||
-                !param.containsKey("cal") || param.get("cal").isEmpty() ||
-                !param.containsKey("d") || param.get("d").isEmpty() ||
-                !param.containsKey("t") || param.get("t").isEmpty()) {
+        if (name.isEmpty() || !param.containsKey("cal") || param.get("cal").isEmpty() || !param.containsKey("d")
+                || param.get("d").isEmpty() || !param.containsKey("t") || param.get("t").isEmpty()) {
             throw new InvalidMealException();
         }
 
@@ -56,6 +45,6 @@ public class AddMealParser {
 
         String formattedDate = DateParser.formatDate(param.get("d"));
 
-        return new AddMealCommand(mealLogs, input, name, param.get("cal"), formattedDate, param.get("t"));
+        return new AddMealCommand(mealLogs, name, param.get("cal"), formattedDate, param.get("t"));
     }
 }

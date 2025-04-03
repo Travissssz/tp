@@ -11,6 +11,12 @@ public class Goals extends Log {
     private Goals(String dailyWaterGoal, String dailyCalorieGoal,
                   String weightGoal, String weeklyWeightProgress, String date) {
         super(date, "goals");
+
+        assert dailyWaterGoal != null : "Daily water goal should not be null";
+        assert dailyCalorieGoal != null : "Daily calorie goal should not be null";
+        assert weightGoal != null : "Weight goal should not be null";
+        assert weeklyWeightProgress != null : "Weekly weight progress should not be null";
+
         this.dailyWaterGoal = dailyWaterGoal;
         this.dailyCalorieGoal = dailyCalorieGoal;
         this.weightGoal = weightGoal;

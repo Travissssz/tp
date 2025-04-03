@@ -1,0 +1,62 @@
+@startuml
+actor User
+participant ":HealthBud" as HealthBud
+participant ":GeneralParser" as GeneralParser
+participant ":AddParser" as AddParser
+participant ":AddWorkoutParser" as AddWorkoutParser
+participant ":ParserParameters" as ParserParameters
+participant ":DateParser" as DateParser
+participant ":AddWorkoutCommand" as AddWorkoutCommand
+participant "workoutLogs:LogList" as LogList
+participant "new:Workout" as Workout
+
+User -> HealthBud : add workout
+activate HealthBud
+
+HealthBud -> GeneralParser : handleInput()
+activate GeneralParser
+
+GeneralParser -> AddParser : parse()
+activate AddParser
+
+AddParser -> AddWorkoutParser : parse(workoutLogs, input)
+activate AddWorkoutParser
+
+AddWorkoutParser -> ParserParameters : parseParameters(0)
+activate ParserParameters
+ParserParameters --> AddWorkoutParser : params
+deactivate ParserParameters
+
+AddWorkoutParser -> DateParser : formatDate()
+activate DateParser
+DateParser --> AddWorkoutParser : formattedDate
+deactivate DateParser
+
+AddWorkoutParser --> AddParser : AddWorkoutCommand
+deactivate AddWorkoutParser
+
+AddParser --> GeneralParser : AddWorkoutCommand
+deactivate AddParser
+
+GeneralParser -> AddWorkoutCommand : execute()
+activate AddWorkoutCommand
+
+AddWorkoutCommand -> Workout : new()
+activate Workout
+Workout --> AddWorkoutCommand
+deactivate Workout
+
+AddWorkoutCommand -> LogList : addLog()
+activate LogList
+LogList --> AddWorkoutCommand
+deactivate LogList
+
+AddWorkoutCommand --> GeneralParser
+deactivate AddWorkoutCommand
+
+GeneralParser --> HealthBud
+deactivate GeneralParser
+
+HealthBud --> User
+deactivate HealthBud
+@enduml

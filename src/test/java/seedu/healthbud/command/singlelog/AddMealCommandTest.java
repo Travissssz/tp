@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import seedu.healthbud.LogList;
-import seedu.healthbud.log.Meal;
-import seedu.healthbud.parser.addcommandparser.AddMealParser;
-import seedu.healthbud.exception.InvalidCardioException;
+import seedu.healthbud.exception.InvalidDateFormatException;
+import seedu.healthbud.exception.InvalidMLException;
 import seedu.healthbud.exception.InvalidMealException;
 import seedu.healthbud.exception.InvalidPersonalBestException;
-import seedu.healthbud.exception.InvalidMLException;
+import seedu.healthbud.exception.InvalidCardioException;
+import seedu.healthbud.log.Meal;
+import seedu.healthbud.parser.addcommandparser.AddMealParser;
 
 class AddMealCommandTest {
 
@@ -49,12 +50,12 @@ class AddMealCommandTest {
 
     @Test
     void validMealAddsToLogList_expectSuccess() throws InvalidPersonalBestException, InvalidMLException
-            , InvalidCardioException {
+            , InvalidCardioException, InvalidMealException, InvalidDateFormatException {
 
         LogList mealLogs = new LogList();
         String input = "add meal chicken rice /cal 550 /d 12-01-2025 /t 9pm";
 
-        AddMealCommand command = new AddMealCommand(mealLogs, input, "chicken rice", "550", "12 Jan 2025", "9pm");
+        AddMealCommand command = AddMealParser.parse(mealLogs, input);
 
         command.execute();
 

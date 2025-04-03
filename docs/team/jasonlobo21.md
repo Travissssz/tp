@@ -27,6 +27,12 @@ I have actively contributed to refining both my own code and that of my teammate
 
 Which sections did you contribute to the UG?
 
+i did parts about delete clear
+meal 
+about any order
+list
+
+
 ## Contributions to the DG
 
 Which sections did you contribute to the DG? Which UML diagrams did you add/updated?

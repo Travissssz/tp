@@ -1,0 +1,43 @@
+@startuml
+
+' Actors
+actor User
+
+' System components in rectangles
+rectangle {
+    rectangle Ui
+    rectangle HealthBud
+    rectangle seedu.healthbud.log
+    rectangle seedu.healthbud.parser
+    rectangle seedu.healthbud.storage
+    rectangle seedu.healthbud.command
+    rectangle LogList
+}
+
+' Actor interaction
+User --[dotted]> Ui
+
+' Main app calls
+HealthBud --> Ui
+HealthBud --> LogList
+HealthBud --> seedu.healthbud.storage
+HealthBud --> seedu.healthbud.parser
+
+' UI accesses model indirectly
+Ui -[dotted]> seedu.healthbud.log
+Ui -[dotted]> LogList
+
+' LogList uses:
+LogList --> seedu.healthbud.log
+LogList --[dotted]> seedu.healthbud.storage
+
+' Parser and Command collaboration
+seedu.healthbud.parser --> seedu.healthbud.command
+seedu.healthbud.command --> LogList
+
+' Storage handles persistence of logs
+seedu.healthbud.storage --> seedu.healthbud.log
+
+hide circle
+
+@enduml

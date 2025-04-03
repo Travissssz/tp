@@ -9,6 +9,7 @@ public class ViewGoalsParser {
 
     Goals goal = Goals.getInstance();
     public static void parse(String input){
+        assert input != null : "Input should not be null";
         Ui.printMessage("Welcome to goal setting! Here are your current goals: \n"
                 + Goals.getInstance().toString());
         Ui.printMessage("What goal would you like to add today?\n");

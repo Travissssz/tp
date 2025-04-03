@@ -6,10 +6,9 @@ import seedu.healthbud.LogList;
 
 public abstract class SingleLogCommand implements Command {
     protected final LogList logList;
-    protected final String input;
 
-    public SingleLogCommand(LogList logList, String input) {
+    public SingleLogCommand(LogList logList) {
+        assert logList != null : "LogList should not be null";
         this.logList = logList;
-        this.input = input;
     }
 }

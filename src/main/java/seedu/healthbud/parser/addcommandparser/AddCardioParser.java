@@ -7,18 +7,23 @@ import seedu.healthbud.exception.InvalidDateFormatException;
 import seedu.healthbud.parser.DateParser;
 import seedu.healthbud.parser.ParserParameters;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class AddCardioParser {
 
     public static AddCardioCommand parse(LogList cardioLogs, String input)
             throws InvalidCardioException, InvalidDateFormatException {
+
+        assert input != null : "Input should not be null";
+
         String[] parts = input.trim().split(" ");
         if (parts.length < 2) {
             throw new InvalidCardioException();
         }
 
-        assert input != null : "Invalid cardio input!";
         if (!input.contains("/s ") || !input.contains("/i ") || !input.contains("/t ") || !input.contains("/d ")) {
             throw new InvalidCardioException();
         }
@@ -26,22 +31,19 @@ public class AddCardioParser {
         // Remove command prefix and trim
         input = input.replaceFirst("add cardio", "").trim();
 
+        String name = input.substring(0, input.indexOf("/")).trim();
+
         if (input.isEmpty()) {
             throw new InvalidCardioException();
         }
 
-        int firstParamIndex = input.indexOf('/');
-        String cardioName;
-        if (firstParamIndex > 0) {
-            cardioName = input.substring(0, firstParamIndex).trim();
-        } else {
-            cardioName = "";  // No name provided before parameters
+        Map<String, String> param = ParserParameters.parseParameters(input.substring(name.length()));
+        Set<String> allowedKeys = new HashSet<>(Arrays.asList("s", "i", "t", "d"));
+        if (!param.keySet().equals(allowedKeys)) {
+            throw new InvalidCardioException();
         }
 
-        Map<String, String> param = ParserParameters.parseParameters(input.substring(firstParamIndex));
-
-        // Validate required parameters
-        if (cardioName.isEmpty() ||
+        if (name.isEmpty() ||
                 !param.containsKey("s") || param.get("s").isEmpty() ||
                 !param.containsKey("i") || param.get("i").isEmpty() ||
                 !param.containsKey("t") || param.get("t").isEmpty() ||
@@ -58,7 +60,7 @@ public class AddCardioParser {
         // Parse and format the date
         String formattedDate = DateParser.formatDate(param.get("d"));
 
-        return new AddCardioCommand(cardioLogs, input, cardioName,
+        return new AddCardioCommand(cardioLogs, name,
                 param.get("s"), param.get("i"), param.get("t"),
                 formattedDate);
     }

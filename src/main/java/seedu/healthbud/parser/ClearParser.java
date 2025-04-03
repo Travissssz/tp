@@ -9,26 +9,24 @@ public class ClearParser {
     public static ClearCommand parse(String input, LogList pbLogs, LogList mealLogs,
                                      LogList workoutLogs, LogList waterLogs, LogList cardioLogs) throws
                                     InvalidClearException {
+        assert input != null : "Input should not be null";
 
         String[] parts = input.trim().split(" ");
-
-        if (parts.length < 2) {
+        if (parts.length != 2) {
             throw new InvalidClearException();
         }
 
-        String logType = parts[1].toLowerCase();
-
-        switch (logType) {
+        switch (parts[1]) {
         case "pb":
-            return new ClearCommand(input, pbLogs);
+            return new ClearCommand(pbLogs);
         case "meal":
-            return new ClearCommand(input, mealLogs);
+            return new ClearCommand(mealLogs);
         case "workout":
-            return new ClearCommand(input, workoutLogs);
+            return new ClearCommand( workoutLogs);
         case "water":
-            return new ClearCommand(input, waterLogs);
+            return new ClearCommand(waterLogs);
         case "cardio":
-            return new ClearCommand(input, cardioLogs);
+            return new ClearCommand(cardioLogs);
         default:
             throw new InvalidClearException();
         }

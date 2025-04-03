@@ -2,22 +2,19 @@ package seedu.healthbud.parser;
 
 import seedu.healthbud.command.input.RecommendCommand;
 import seedu.healthbud.exception.InvalidRecommendException;
-import seedu.healthbud.exception.HealthBudException;
 
 public class RecommendParser {
 
     private static final String NEW_LINE = "\n     ";
 
-    public static RecommendCommand parse(String input) throws InvalidRecommendException, HealthBudException {
+    public static RecommendCommand parse(String input) throws InvalidRecommendException {
+        assert input != null : "Input should not be null";
         String[] parts = input.trim().split(" ");
-
-        if (parts.length < 2) {
+        if (parts.length != 2) {
             throw new InvalidRecommendException();
         }
 
-        String muscle = parts[1].toLowerCase();
-
-        switch (muscle) {
+        switch (parts[1]) {
         case "chest":
             return new RecommendCommand("Here are some recommended chest exercises:" + NEW_LINE
                     + "1. Incline Smith Machine Bench Press" + NEW_LINE
@@ -78,8 +75,7 @@ public class RecommendParser {
                     + "8. forearms");
 
         default:
-            throw new HealthBudException("I don't recognize that muscle group." + NEW_LINE
-                    + "Type 'recommend help' to see the list of muscle groups.");
+            throw new InvalidRecommendException();
         }
     }
 }

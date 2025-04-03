@@ -10,6 +10,8 @@ public class TrackGoalParser {
     public static TrackGoalCommand parse(String input, LogList goalLogs, LogList pbLogs, LogList mealLogs,
                                          LogList workoutLogs, LogList waterLogs, LogList cardioLogs)
             throws InvalidTrackException, InvalidDateFormatException {
+
+        assert input != null : "Input should not be null";
         String[] parts = input.trim().split(" ");
 
         if (parts.length < 4 || !parts[2].equals("/d")) {

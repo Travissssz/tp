@@ -66,9 +66,9 @@ class StatusCommandTest {
 
         StatusParser.parse("status change bulking", empty, empty, meal, empty, empty, cardio);
 
-        new AddMealCommand(meal, "", "Lunch", "300",
+        new AddMealCommand(meal, "Lunch", "300",
                 "2024-04-01", "12:00").execute();
-        new AddCardioCommand(cardio, "", "Stairs", "4",
+        new AddCardioCommand(cardio, "Stairs", "4",
                 "1", "30", "2024-04-01").execute();
 
         StatusCommand command = StatusParser.parse("status report 2024-04-01", empty,
@@ -85,8 +85,8 @@ class StatusCommandTest {
 
         StatusParser.parse("status change bulking", empty, empty, meal, empty, empty, cardio);
 
-        new AddMealCommand(meal, "", "Lunch", "300", "2024-04-01", "12:00").execute();
-        new AddCardioCommand(cardio, "", "Jog", "1", "0",
+        new AddMealCommand(meal, "Lunch", "300", "2024-04-01", "12:00").execute();
+        new AddCardioCommand(cardio, "Jog", "1", "0",
                 "30", "2024-04-01").execute();
 
         StatusCommand command = StatusParser.parse("status report 2024-04-01", empty, empty, meal,
@@ -104,8 +104,8 @@ class StatusCommandTest {
 
         StatusParser.parse("status change cutting", empty, empty, meal, empty, empty, cardio);
 
-        new AddMealCommand(meal, "", "Dinner", "300", "2024-04-01", "18:00").execute();
-        new AddCardioCommand(cardio, "", "Jog", "1", "0",
+        new AddMealCommand(meal,"Dinner", "300", "2024-04-01", "18:00").execute();
+        new AddCardioCommand(cardio, "Jog", "1", "0",
                 "30", "2024-04-01").execute();
 
         StatusCommand command = StatusParser.parse("status report 2024-04-01", empty, empty,
@@ -122,8 +122,8 @@ class StatusCommandTest {
 
         StatusParser.parse("status change cutting", empty, empty, meal, empty, empty, cardio);
 
-        new AddMealCommand(meal, "", "Oats", "200", "2024-04-01", "08:00").execute();
-        new AddCardioCommand(cardio, "", "HIIT", "3", "0",
+        new AddMealCommand(meal, "Oats", "200", "2024-04-01", "08:00").execute();
+        new AddCardioCommand(cardio, "HIIT", "3", "0",
                 "30", "2024-04-01").execute();
 
         StatusCommand command = StatusParser.parse("status report 2024-04-01", empty, empty,

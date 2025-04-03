@@ -2,6 +2,6 @@ package seedu.healthbud.exception;
 
 public class InvalidWaterException extends Exception {
     public InvalidWaterException() {
-        super("Invalid water log command - add water /ml <volume> /d <date> /t <time>");
+        super("Invalid water command (e.g. add water /v <volume> /t <time> /d <DD/MM/YYYY>)");
     }
 }

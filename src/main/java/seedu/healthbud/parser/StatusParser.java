@@ -12,6 +12,8 @@ public class StatusParser {
                                       LogList workoutLogs, LogList waterLogs, LogList cardioLogs)
             throws InvalidStatusException {
 
+        assert input != null : "Input should not be null";
+
         String[] parts = input.trim().split(" ");
         if (parts.length < 3) {
             throw new InvalidStatusException();

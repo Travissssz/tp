@@ -19,13 +19,17 @@ public class HealthBud {
 
 
     public static void main(String[] args) {
+
         Ui.printGreeting();
         Storage.loadLogs(mealLogs, workoutLogs, waterLogs, pbLogs, cardioLogs, goalLogs);
         Scanner in = new Scanner(System.in);
+        assert in != null : "Scanner object should not be null";
         boolean isLooping = true;
         while (isLooping) {
+            String input = in.nextLine().trim().toLowerCase();
+            assert !input.isEmpty() : "Input should not be empty";
             isLooping = ParserManager.handleInput(goalLogs, pbLogs, mealLogs, workoutLogs, waterLogs, cardioLogs,
-                    in.nextLine().trim().toLowerCase());
+                    input);
         }
     }
 }

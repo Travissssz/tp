@@ -11,7 +11,7 @@ This application was developed as part of a university software engineering modu
 
 ### Architecture
 
-`//include architecture diagram here`
+![img.png](img.png)
 
 The Architecture Diagram given above explains the high-level design of the HealthBud.
 
@@ -68,14 +68,13 @@ This design promotes extensibility and encapsulation, allowing new log types to 
 The Storage class manages HealthBud log persistence by reading and writing to a designated text file. It creates necessary directories and files, loads logs by parsing each line into specific types (Meal, Workout, etc.), and distributes them into corresponding LogLists. It also appends and rewrites logs using formatted string representations while handling errors gracefully.
 ![Storage_Class_Diagram](images/StorageCD.png)
 
-### Data
-`//TODO: include command class diagram here`
-
-
 # Implementation
 
 ## Add Log Command
 `//TODO: include SD here`
+The add Log command ensures that when users add a new log(e.g "add workout..."),
+The inputted entry would be appended into an array list in its corresponding Loglist. 
+![AddLogCommand SD.png](images/AddLogCommand%20SD.png)
 
 ## Delete Log Command
 The delete log feature allows users to remove a log by its index from the application's log list. This feature is handled by the `DeleteCommand` class, which performs validation, deletion, and error handling.
@@ -177,37 +176,57 @@ An alt block handles:
 This structure clearly separates parsing, command creation, and UI interaction for robust handling.
 
 
-## BMICommand
+## BMI Command
+The command calculates the user's Body Mass Index (BMI) based on the provided weight (in kilograms) and height (in meters), then categorizes the user as underweight, normal weight, overweight, or obese.
 
-### 1. Feature overview:
-The **BMICommand** feature allows users to calculate their Body Mass Index (BMI) and receive a classification (e.g., underweight, normal weight, overweight, obese). It’s useful for users who want a quick health metric based on their height and weight inputs.
-### 2. Implementation details:
-Inherits from InputOnlyCommand (which in turn extends the base Command class) to handle input parsing.
+### 1. User Input:
+- The user enters `bmi /w <weight> /h <height>` (e.g., `bmi /w 60 /h 1.70`).
+- Weight must be a valid number representing kilograms.
+- Height must be a valid number representing meters.
 
-Stores weight and height as immutable (final) fields.
-### 3. Why this design:
-Single Responsibility:
-The BMI calculation is isolated in its own command, keeping the logic clean and focused.
+### 2. Command Parsing:
+- **BMIParser** handles parsing and validation of the user input.
+- It checks that:
+   - The input is not null or empty.
+   - The input contains a slash (`/`) separating weight and height.
+   - Both weight and height can be parsed into valid numeric values.
+- If any of these checks fail, an **InvalidBMIException** is thrown, prompting the user to correct their input format.
 
-Readability & Testability:
-The concise code structure makes it easy to unit test and maintain.
+### 3. The `BMICommand` Executes as Follows:
+- Once constructed with the valid weight and height, **BMICommand** calculates the BMI using the formula:
+  \[
+  \text{BMI} = \frac{\text{weight}}{(\text{height} \times \text{height})}
+  \]
+- The command then checks the BMI value and calls **Ui.printMessage()** with a message indicating whether the user is:
+   - Underweight (BMI < 18.5)
+   - Normal weight (18.5 ≤ BMI < 25)
+   - Overweight (25 ≤ BMI < 30)
+   - Obese (BMI ≥ 30)
 
-Extensibility:
-Future changes (e.g., additional BMI categories or metrics) can be made in this class without impacting other parts of the system.
-###  4. Alternatives considered:
-online Calculation in the Parser
+### 4. How the Feature is Implemented:
+- **BMIParser** extracts the numerical values for weight and height from the user input.
+- It instantiates a **BMICommand** object with these parsed values.
+- **BMICommand** performs the BMI calculation and categorization in its `execute()` method.
+- The categorization strings are hardcoded for clarity and simplicity.
 
-Implementing BMI logic directly in the parser would mix concerns and lead to a more complex parser design.
+### 5. Why It Is Implemented That Way:
+- **Separation of Concerns**: Parsing logic (e.g., checking for valid input and splitting the string) resides in **BMIParser**, while the command class focuses on calculation and message output.
+- **Clarity**: Keeping the BMI formula and category checks in `execute()` makes it straightforward to read and maintain.
+- **Testability**: This approach allows unit testing the parser separately from the command execution, ensuring each component is robust and reliable.
 
-Using an External Library
+### 6. Alternatives Considered:
+- **Single-Class Implementation**: Combining parsing and execution logic into one class would reduce the number of classes but make the code less organized and harder to maintain.
+- **More Complex Validation**: Additional checks (e.g., extremely high or low values) could be added, but the current design focuses on standard BMI ranges and clear user prompts.
+- **External Configuration**: Storing BMI thresholds or messages in an external file could add flexibility but also increase overhead for what is essentially static data.
 
-Given the simplicity of the BMI formula, an external library would add unnecessary complexity.
 
 5. Sequence Diagrams
    ![BMI_Sequence_Diagram](images/BMISD.png)
+   
+Diagram Explanation <br>
 
-6. ### Future Improvements
-   Future improvements for the BMI command could include personalized BMI thresholds based on user profiles, comprehensive historical tracking, and clear visualizations of BMI changes over time for improved health insights.
+The user inputs a BMI command with weight and height. HealthBud delegates parsing to BMIParser, which validates data and returns a BMICommand. The command calculates BMI and displays the result.
+   
 
 
 
@@ -263,7 +282,7 @@ This unified approach was abandoned because it would have required extensive run
 The current specialized class structure provides better compile-time checks and more intuitive code organization.
 
 ### 5. Sequence Diagrams
-![Addworkout.png](images/Addworkout.png)
+![AddWorkoutSD.png](images/AddWorkoutSD.png)
 
 ### 6. Future Improvements
 The weight tracking functionality will be enhanced to support more advanced strength training scenarios.

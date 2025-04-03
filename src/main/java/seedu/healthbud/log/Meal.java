@@ -8,6 +8,9 @@ public class Meal extends Log {
 
     public Meal(String name, String calories, String date, String time){
         super(date, "meal");
+        assert name != null : "Meal name should not be null";
+        assert calories != null : "Calories should not be null";
+        assert time != null : "Time should not be null";
         this.name = name;
         this.calories = calories;
         this.time = time;

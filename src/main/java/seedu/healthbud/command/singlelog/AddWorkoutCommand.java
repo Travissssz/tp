@@ -14,34 +14,17 @@ public class AddWorkoutCommand extends SingleLogCommand {
     private final String date;
     private final String weight;
 
-    public AddWorkoutCommand(LogList workoutLogs, String input, String name,
+    public AddWorkoutCommand(LogList workoutLogs, String name,
                              String reps, String sets, String date, String weight) {
-        super(workoutLogs, input);
+        super(workoutLogs);
+
+        assert workoutLogs != null : "LogList (workoutLogs) should not be null";
+
         this.name = name;
         this.reps = reps;
         this.sets = sets;
         this.date = date;
         this.weight = weight;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getReps() {
-        return reps;
-    }
-
-    public String getSets() {
-        return sets;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getWeight() {
-        return weight;
     }
 
     @Override

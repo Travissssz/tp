@@ -11,16 +11,17 @@ public class ParserManager {
 
     public static boolean handleInput(LogList goalLogs, LogList pbLogs, LogList mealLogs, LogList workoutLogs,
                                       LogList waterLogs, LogList cardioLogs, String input) {
-        String[] parts = input.trim().split("\\s+");
+
+        assert input != null : "Input should not be null";
+        String function = input.split(" ")[0];
 
         try {
             Command command;
-            switch (parts[0]) {
+            switch (function) {
             case "bye":
                 return Ui.printGoodbye();
             case "add":
-                command = AddParser.parse(parts[1], mealLogs, waterLogs, cardioLogs, pbLogs,
-                        workoutLogs, goalLogs, input);
+                command = AddParser.parse(input, mealLogs, waterLogs, cardioLogs, pbLogs, workoutLogs, goalLogs);
                 break;
             case "help":
                 Ui.printHelp();

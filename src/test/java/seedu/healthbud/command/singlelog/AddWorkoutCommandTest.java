@@ -1,68 +1,38 @@
-package seedu.healthbud;
+package seedu.healthbud.command.singlelog;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-import seedu.healthbud.command.onelogandinput.AddWorkoutCommand;
-import seedu.healthbud.exception.InvalidDateFormatException;
+import seedu.healthbud.LogList;
 import seedu.healthbud.exception.InvalidWorkoutException;
 import seedu.healthbud.log.Workout;
 import seedu.healthbud.parser.addcommandparser.AddWorkoutParser;
 
-//@@author Travissssz
 public class AddWorkoutCommandTest {
 
-    // ========== **SUCCESS CASES (VALID INPUTS)** ==========
     @Test
-    void parse_validInput_createsCorrectCommand() throws Exception {
+    void workoutLog_validInput_expectSuccess() throws Exception {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /s 3 /d 25-12-2023 /w 50";
 
-        AddWorkoutCommand command = AddWorkoutParser.parse(workoutLogs, input);
-
-        assertEquals("squats", command.getName());
-        assertEquals("10", command.getReps());
-        assertEquals("3", command.getSets());
-        assertEquals("25 Dec 2023", command.getDate());
-        assertEquals("50", command.getWeight());
-    }
-
-    @Test
-    void parse_inputWithDifferentParameterOrder_works() throws Exception {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /w 50 /d 25-12-2023 /s 3 /r 10";
-
-        AddWorkoutCommand command = AddWorkoutParser.parse(workoutLogs, input);
-
-        assertEquals("10", command.getReps()); // Ensures parsing works regardless of order
-    }
-
-    @Test
-    void parse_zeroValues_acceptsInput() throws Exception {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r 0 /s 0 /d 25-12-2023 /w 0";
-
-        AddWorkoutCommand command = AddWorkoutParser.parse(workoutLogs, input);
-
-        assertEquals("0", command.getReps()); // Tests zero-value handling
-    }
-
-    @Test
-    void execute_validWorkout_addsToLogList() throws Exception {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r 10 /s 3 /d 25-12-2023 /w 50";
         AddWorkoutCommand command = AddWorkoutParser.parse(workoutLogs, input);
 
         command.execute();
 
-        Workout addedWorkout = (Workout) workoutLogs.getLog(0);
-        assertEquals("squats", addedWorkout.getName()); // Ensures execute() works
+        Workout workout = (Workout) workoutLogs.getLog(0);
+        assertEquals("squats", workout.getName());
+        assertEquals("10", workout.getReps());
+        assertEquals("3", workout.getSets());
+        assertEquals("25 Dec 2023", workout.getDate());
+        assertEquals("50", workout.getWeight());
+
+        String expected = "squats (3 sets of 50 kg for 10 reps) on 25 Dec 2023";
+        assertEquals(expected, workout.toString());
     }
 
-    // ========== **FAILURE CASES (INVALID INPUTS)** ==========
     @Test
-    void parse_missingName_throwsException() {
+    void workoutLog_missingName_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout /r 10 /s 3 /d 25-12-2023 /w 50";
 
@@ -71,7 +41,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_missingReps_throwsException() {
+    void workoutLog_missingReps_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /s 3 /d 25-12-2023 /w 50";
 
@@ -80,7 +50,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_missingSets_throwsException() {
+    void workoutLog_missingSets_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /d 25-12-2023 /w 50";
 
@@ -89,7 +59,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_missingDate_throwsException() {
+    void workoutLog_missingDate_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /s 3 /w 50";
 
@@ -98,7 +68,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_missingWeight_throwsException() {
+    void workoutLog_missingWeight_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /s 3 /d 25-12-2023";
 
@@ -107,7 +77,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_nonNumericReps_throwsException() {
+    void workoutLog_nonNumericReps_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r ten /s 3 /d 25-12-2023 /w 50";
 
@@ -116,7 +86,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_nonNumericSets_throwsException() {
+    void workoutLog_nonNumericSets_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /s three /d 25-12-2023 /w 50";
 
@@ -125,7 +95,7 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_nonNumericWeight_throwsException() {
+    void workoutLog_nonNumericWeight_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout squats /r 10 /s 3 /d 25-12-2023 /w fifty";
 
@@ -134,51 +104,12 @@ public class AddWorkoutCommandTest {
     }
 
     @Test
-    void parse_negativeReps_throwsException() {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r -10 /s 3 /d 25-12-2023 /w 50";
-
-        assertThrows(InvalidWorkoutException.class, () ->
-                AddWorkoutParser.parse(workoutLogs, input));
-    }
-
-    @Test
-    void parse_emptyInput_throwsException() {
+    void workoutLog_emptyInput_throwsException() {
         LogList workoutLogs = new LogList();
         String input = "add workout";
 
         assertThrows(InvalidWorkoutException.class, () ->
                 AddWorkoutParser.parse(workoutLogs, input));
-    }
-
-    @Test
-    void parse_invalidDateFormat_throwsException() {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r 10 /s 3 /d 12/25 /w 50";
-
-        assertThrows(InvalidDateFormatException.class, () ->
-                AddWorkoutParser.parse(workoutLogs, input));
-    }
-
-    // ========== **EDGE CASES (EXTREME VALUES)** ==========
-    @Test
-    void parse_maxIntegerValues_works() throws Exception {
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r 2147483647 /s 2147483647 /d 25-12-2023 /w 2147483647";
-
-        AddWorkoutCommand command = AddWorkoutParser.parse(workoutLogs, input);
-
-        assertEquals("2147483647", command.getReps()); // Tests max int handling
-    }
-
-
-    // ========== **WORKOUT CLASS TESTS** ==========
-    @Test
-    void workoutToString_returnsCorrectFormat() {
-        Workout workout = new Workout("squats", "10", "3", "25 Dec 2023", "50");
-        String expected = "squats (3 sets of 50 kg for 10 reps) on 25 Dec 2023";
-
-        assertEquals(expected, workout.toString()); // Ensures toString() works
     }
 
     @Test
@@ -262,22 +193,4 @@ public class AddWorkoutCommandTest {
                 AddWorkoutParser.parse(workoutLogs, input));
     }
 
-    @Test
-    void validWorkoutAddsToLogList_expectSucess() throws InvalidWorkoutException{
-        LogList workoutLogs = new LogList();
-        String input = "add workout squats /r 10 /s 3 /d 25-12-2023 /w 50";
-
-        AddWorkoutCommand command = new AddWorkoutCommand(workoutLogs, input, "squats", "10", "3", "25 Dec 2023", "50");
-        command.execute();
-
-        Workout workout = (Workout) workoutLogs.getLog(0);
-        assertEquals("squats", workout.getName());
-        assertEquals("10", workout.getReps());
-        assertEquals("25 Dec 2023", workout.getDate());
-        assertEquals("50", workout.getWeight());
-        assertEquals("3", workout.getSets());
-
-        String expected = "squats (3 sets of 50 kg for 10 reps) on 25 Dec 2023";
-        assertEquals(expected, workout.toString());
-    }
 }

@@ -27,10 +27,9 @@ class ClearCommandTest {
         String input = "add meal chicken rice /cal 550 /d 12-01-2025 /t 9pm";
         String secondInput = "add meal tom yum /cal 650 /d 13-01-2025 /t 8pm";
 
-        AddMealCommand addCommand1 = new AddMealCommand(mealLogs, input, "chicken rice", "550",
-                "12 Jan 2025", "9pm");
-        AddMealCommand addCommand2 = new AddMealCommand(mealLogs, secondInput, "tom yum", "650",
-                "13 Jan 2025", "8pm");
+
+        AddMealCommand addCommand1 = new AddMealCommand(mealLogs,"chicken rice", "550", "12 Jan 2025", "9pm");
+        AddMealCommand addCommand2 = new AddMealCommand(mealLogs,"tom yum", "650", "13 Jan 2025", "8pm");
 
         addCommand1.execute();
         addCommand2.execute();
@@ -38,7 +37,7 @@ class ClearCommandTest {
         assertEquals(2, mealLogs.getSize());
 
         String clearInput = "clear meal";
-        ClearCommand clearCommand = new ClearCommand(clearInput, mealLogs);
+        ClearCommand clearCommand = new ClearCommand(mealLogs);
         clearCommand.execute();
 
         assertEquals(0, mealLogs.getSize());

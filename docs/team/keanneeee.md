@@ -30,9 +30,27 @@ I added the Goals Section as well as the Architecture Diagram.
 
 ## Contributions to team-based tasks
 
-## Review/mentoring contributions
-Links to PRs reviewed, instances of helping team members in other ways.
+I ensured that there was in depth testing being done for all our functions. Specifically:
+- Wrote comprehensive tests for add goals and water.
+- Helped to review and refactor existing test cases to align with our new parser-logic separation
 
-## Contributions beyond the project team:
-Evidence of helping others e.g. responses you posted in our forum, bugs you reported in other team's products,
-Evidence of technical leadership e.g. sharing useful information in the forum
+In terms of the entire project:
+- I reviewed parts of our teams code and spotted a few bugs which I proceeded to fix
+- Reviewed and linked PRs to branch such that the entire process ran smoothly
+
+## Review/mentoring contributions
+Here are some of the PRs reviewed:
+
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/125
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/118
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/116
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/97
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/93
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/88
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/58
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/15
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/14
+https://github.com/AY2425S2-CS2113-W13-4/tp/pull/13
+
+Actively Participated in group discussions to restructure our project and provided valuable inputs.
+
